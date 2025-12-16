@@ -19,19 +19,15 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class LoginFrame extends JPanel {
+public class LoginViewFrame extends JPanel {
 	
-	private PresentationModel<Usuario> model;
-	private Usuario usuarioBean;
+	private LoginPresentationModel loginModel;
 	
 	private JTextField loginField;
 	private JPasswordField passwordField;
 	private JButton enterButton;
 	
-	public LoginFrame() { 
-		usuarioBean = new Usuario(); 
-		model = new PresentationModel<Usuario>(usuarioBean); //faz o papel do presenter, ligação entre model(usuário e a view)
-		
+	public LoginViewFrame() { 
 		initComponents();
 		buildUI();
 		this.setPreferredSize(new Dimension(400, 200));
@@ -39,7 +35,9 @@ public class LoginFrame extends JPanel {
 	}
 	
 	private void initComponents() {
-		loginField = BasicComponentFactory.createTextField(model.getModel("login"));
+		loginModel = new LoginPresentationModel();
+		
+		loginField = BasicComponentFactory.createTextField(loginModel.getPresenter().getModel("login"));
 		
 		passwordField = new JPasswordField(20);
 		enterButton = new JButton("Entrar");
@@ -64,32 +62,31 @@ public class LoginFrame extends JPanel {
 		this.add(builder.getPanel());
 		
 		enterButton.addActionListener(e -> {
-			fazerLogin();
+			
+			boolean sucesso = loginModel.tentarLogar(new String(passwordField.getPassword()));
+			
+			Usuario usuario = new Usuario();
+			
+			if (sucesso) {
+				String loginValido = loginModel.getUsuarioBean().getLogin();
+				
+				JOptionPane.showMessageDialog(this, "Sucesso, bem vindo! " + loginValido);
+				//tela principal
+			} else {
+				JOptionPane.showMessageDialog(this, "Login ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
+			}	
 		});
 	}
 	
-	public void fazerLogin() {
-		String loginDigitado = usuarioBean.getLogin();
-		String passwordDigitada = new String(passwordField.getPassword());
-		
-		UsuarioDAO dao = new UsuarioDAO();
-		
-		Usuario usuario = dao.findByLogin(loginDigitado);
-		
-		if (usuario != null && dao.validarSenha(usuario, passwordDigitada)) {
-			JOptionPane.showMessageDialog(this, "Sucesso, bem vindo! " + usuario.getLogin());
-		} else {
-			JOptionPane.showMessageDialog(this, "Login ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
-		}	
-	}
-	
 	public static void main(String[] args) {
-		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+		} catch (Exception e) {
+		}
 		
 		SwingUtilities.invokeLater(() -> {
 			
 			JFrame frame = new JFrame("teste");
-			frame.add(new LoginFrame());
+			frame.add(new LoginViewFrame());
 			frame.pack();
 			frame.setResizable(false);
 			frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
@@ -97,6 +94,4 @@ public class LoginFrame extends JPanel {
 			frame.setVisible(true);
 		});
 	}
-	
-
 }
