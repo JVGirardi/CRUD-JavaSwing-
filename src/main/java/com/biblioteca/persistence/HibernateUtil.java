@@ -13,7 +13,6 @@ public class HibernateUtil {
 			return new Configuration().configure().buildSessionFactory();
 			
 		} catch (Throwable ex) {
-			//se der erro, ex banco desligado, senha errada avisa no console:
 			System.err.println("Falha na criação da SessionFactory inicial" + ex);
 			throw new ExceptionInInitializerError(ex);
 		}

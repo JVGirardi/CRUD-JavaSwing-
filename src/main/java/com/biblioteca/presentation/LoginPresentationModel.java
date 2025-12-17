@@ -36,11 +36,15 @@ public class LoginPresentationModel {
 		return (usuario != null && dao.validarSenha(usuario, senhaDigitada));
 		
 	}
+	
+	public void limparCampos() {
+		presenter.getModel("login").setValue(null);
+	}
 
 	public PresentationModel<Usuario> getPresenter() {
 		return presenter;
 	}
-
+	
 	public void setPresenter(PresentationModel<Usuario> presenter) {
 		this.presenter = presenter;
 	}

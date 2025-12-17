@@ -1,6 +1,7 @@
 package com.biblioteca.presentation;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,14 +13,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import com.biblioteca.domain.Usuario;
-import com.biblioteca.persistence.UsuarioDAO;
-import com.jgoodies.binding.PresentationModel;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class LoginViewFrame extends JPanel {
+public class LoginPanel extends JPanel {
 	
 	private LoginPresentationModel loginModel;
 	
@@ -27,7 +26,7 @@ public class LoginViewFrame extends JPanel {
 	private JPasswordField passwordField;
 	private JButton enterButton;
 	
-	public LoginViewFrame() { 
+	public LoginPanel() { 
 		initComponents();
 		buildUI();
 		this.setPreferredSize(new Dimension(400, 200));
@@ -57,36 +56,45 @@ public class LoginViewFrame extends JPanel {
 		builder.nextLine();
 		builder.append("Senha: ", passwordField);
 		builder.nextLine();
-		builder.append(enterButton, 3);
+		JPanel buttonBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttonBar.add(enterButton);
+		builder.nextLine();
+		builder.nextLine();
+		builder.append(buttonBar, 3);
 		
 		this.add(builder.getPanel());
+		
+		passwordField.addActionListener(e -> enterButton.doClick());
 		
 		enterButton.addActionListener(e -> {
 			
 			boolean sucesso = loginModel.tentarLogar(new String(passwordField.getPassword()));
 			
-			Usuario usuario = new Usuario();
-			
 			if (sucesso) {
 				String loginValido = loginModel.getUsuarioBean().getLogin();
 				
 				JOptionPane.showMessageDialog(this, "Sucesso, bem vindo! " + loginValido);
+				loginModel.limparCampos();
+				passwordField.setText("");
 				//tela principal
 			} else {
 				JOptionPane.showMessageDialog(this, "Login ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
+				loginModel.limparCampos();
+				passwordField.setText("");
+				loginField.requestFocus();
 			}	
 		});
 	}
 	
 	public static void main(String[] args) {
-		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+		try {
+			UIManager.setLookAndFeel(new FlatLightLaf());
 		} catch (Exception e) {
 		}
-		
 		SwingUtilities.invokeLater(() -> {
 			
 			JFrame frame = new JFrame("teste");
-			frame.add(new LoginViewFrame());
+			frame.add(new LoginPanel());
 			frame.pack();
 			frame.setResizable(false);
 			frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
