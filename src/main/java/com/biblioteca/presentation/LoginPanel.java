@@ -20,6 +20,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 public class LoginPanel extends JPanel {
 	
+	private Runnable onLoginSuccess;
+	
 	private LoginPresentationModel loginModel;
 	
 	private JTextField loginField;
@@ -28,10 +30,15 @@ public class LoginPanel extends JPanel {
 	
 	public LoginPanel() { 
 		initComponents();
+		initListeners();
 		buildUI();
 		this.setPreferredSize(new Dimension(400, 200));
 		
 	}
+	
+	public void setOnLoginSuccess(Runnable onLoginSuccess) {
+        this.onLoginSuccess = onLoginSuccess;
+    }
 	
 	private void initComponents() {
 		loginModel = new LoginPresentationModel();
@@ -63,6 +70,9 @@ public class LoginPanel extends JPanel {
 		builder.append(buttonBar, 3);
 		
 		this.add(builder.getPanel());
+	}
+		
+	public void initListeners() {
 		
 		passwordField.addActionListener(e -> enterButton.doClick());
 		
@@ -76,7 +86,10 @@ public class LoginPanel extends JPanel {
 				JOptionPane.showMessageDialog(this, "Sucesso, bem vindo! " + loginValido);
 				loginModel.limparCampos();
 				passwordField.setText("");
-				//tela principal
+				
+				if (onLoginSuccess != null) {
+                    onLoginSuccess.run();
+                }
 			} else {
 				JOptionPane.showMessageDialog(this, "Login ou senha inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
 				loginModel.limparCampos();
