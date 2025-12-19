@@ -34,6 +34,7 @@ public class ClientFormPanel extends JPanel {
 	private JTextField emailField;
 	private JTextField phoneField;
 	private JButton registerButton;
+	private JButton cleanButton;
 	
 	public ClientFormPanel() {
 		super(new BorderLayout());
@@ -60,6 +61,7 @@ public class ClientFormPanel extends JPanel {
 		phoneField = BasicComponentFactory.createTextField(clientModel.getPhoneNumber());
 		
 		registerButton = new JButton("Salvar");
+		cleanButton = new JButton("Cancelar");
 	}
 	
 	public void buildPanel() {
@@ -136,6 +138,14 @@ public class ClientFormPanel extends JPanel {
 				JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
 			}
 		}); 
+		
+		cleanButton.addActionListener(e -> {
+			
+			if (clientModel.getBean().getId() != null || !clientModel.getNameModel().getValue().toString().isEmpty()) {
+			
+				clientModel.setBean(new Client());
+			};
+		});
 		
 	}
 

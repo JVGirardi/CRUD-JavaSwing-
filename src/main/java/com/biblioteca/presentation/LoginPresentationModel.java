@@ -27,7 +27,6 @@ public class LoginPresentationModel {
 		
 	}
 	
-	
 	public boolean tentarLogar(String senhaDigitada) {
 		String loginDigitado = usuarioBean.getLogin();
 		

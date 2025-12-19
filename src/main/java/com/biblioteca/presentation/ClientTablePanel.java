@@ -3,6 +3,7 @@ package com.biblioteca.presentation;
 import java.awt.BorderLayout;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -119,10 +120,5 @@ public class ClientTablePanel extends JPanel {
 		buttonPanel.setBorder(new EmptyBorder(20,20,20,20));
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
-	
-	
-	
-	
-	
 
 }

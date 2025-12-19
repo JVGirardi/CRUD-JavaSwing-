@@ -37,5 +37,8 @@ public class ClientListModel extends Bean {
 	public SelectionInList<Client> getSelection() {
 		return selection;
 	}
+	
+	
+	
 
 }
