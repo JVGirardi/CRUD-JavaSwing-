@@ -20,6 +20,8 @@ import com.biblioteca.domain.Client;
 import com.biblioteca.persistence.ClientDAO;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.value.BindingConverter;
+import com.jgoodies.binding.value.ConverterValueModel;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
@@ -30,6 +32,7 @@ public class ClientFormPanel extends JPanel {
 	
 	private Runnable onSaveCallback;
 	
+	private JLabel idField;
 	private JTextField nameField;
 	private JTextField emailField;
 	private JTextField phoneField;
@@ -59,9 +62,28 @@ public class ClientFormPanel extends JPanel {
 		nameField = BasicComponentFactory.createTextField(clientModel.getNameModel());
 		emailField = BasicComponentFactory.createTextField(clientModel.getEmailModel());
 		phoneField = BasicComponentFactory.createTextField(clientModel.getPhoneNumber());
+		idField = BasicComponentFactory.createLabel(
+			    new ConverterValueModel(clientModel.getId(), new BindingConverter() {
+			        @Override 
+			        public Object targetValue(Object sourceValue) {
+			            return sourceValue == null ? "" : sourceValue.toString();
+			        }
+
+			        @Override
+			        public Object sourceValue(Object targetValue) {
+			            try {
+			                return (targetValue == null || targetValue.toString().isEmpty()) 
+			                       ? null 
+			                       : Long.valueOf(targetValue.toString());	
+			            } catch (NumberFormatException e) {
+			                return null;
+			            }
+			        }
+			    })
+			);
 		
 		registerButton = new JButton("Salvar");
-		cleanButton = new JButton("Cancelar");
+		cleanButton = new JButton("Limpar");
 	}
 	
 	public void buildPanel() {
@@ -85,6 +107,9 @@ public class ClientFormPanel extends JPanel {
 		builder.appendSeparator("Dados pessoais");
 		builder.nextLine();
 		
+		builder.append("ID", idField);
+		builder.nextLine();
+		
 		builder.append("Nome Completo ", nameField);
 		builder.nextLine();
 		
@@ -101,7 +126,8 @@ public class ClientFormPanel extends JPanel {
 		ButtonBarBuilder btnBuilder = new ButtonBarBuilder();
 		btnBuilder.addGlue(); //empurra tudo para a direita
 		btnBuilder.addButton(registerButton);
-		//btnBuilder.addRelatedGap(); 
+		btnBuilder.addRelatedGap();
+		btnBuilder.addButton(cleanButton);
 		
 		JPanel buttonPanel = btnBuilder.getPanel();
 		buttonPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -124,7 +150,8 @@ public class ClientFormPanel extends JPanel {
 			
 				ClientDAO dao = new ClientDAO();
 				
-				dao.saveOrUpdate(clientModel.getBean());
+				Client savedClient = dao.saveOrUpdate(clientModel.getBean());
+				clientModel.setBean(savedClient);
 				
 				JOptionPane.showMessageDialog(this, "Cliente " + clientModel.getNameModel().getValue() + 
 						" \n cadastrado com sucesso!");
@@ -141,12 +168,22 @@ public class ClientFormPanel extends JPanel {
 		
 		cleanButton.addActionListener(e -> {
 			
-			if (clientModel.getBean().getId() != null || !clientModel.getNameModel().getValue().toString().isEmpty()) {
+			boolean temNome = isNotBlank(clientModel.getNameModel().getValue());
+			boolean temEmail = isNotBlank(clientModel.getEmailModel().getValue());
+			boolean temNumero = isNotBlank(clientModel.getPhoneNumber().getValue());
+			boolean temID = clientModel.getBean().getId() != null;
 			
+			if ( temID || temNome || temEmail || temNumero) {
 				clientModel.setBean(new Client());
+			} else {
+				JOptionPane.showMessageDialog(this, "Não há campos para serem limpos.");
 			};
 		});
 		
+	}
+	
+	public boolean isNotBlank(Object value) {
+		return value != null && !value.toString().trim().isEmpty();
 	}
 
 	

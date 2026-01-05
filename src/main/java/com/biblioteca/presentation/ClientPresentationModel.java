@@ -24,6 +24,10 @@ public class ClientPresentationModel extends PresentationModel<Client> {
 		return getModel("phone");
 	}
 	
+	public ValueModel getId() {
+		return getModel("id");
+	}
+	
 	public String getErrosValidacao() {
 		StringBuilder erros = new StringBuilder();
 		Client client = getBean();

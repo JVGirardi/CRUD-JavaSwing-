@@ -10,19 +10,21 @@ import com.biblioteca.domain.Client;
 
 public class ClientDAO {
 	
-	public void saveOrUpdate(Client client) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+	public Client saveOrUpdate(Client client) {
+		Session session = session();
 		Transaction transaction = null;
 		
 		try {
 			transaction = session.beginTransaction();
-			session.merge(client);//persist para novos cadastro, merge p para os dois
+			Client managedClient = (Client) session.merge(client);//persist para novos cadastro, merge p para os dois
 			transaction.commit();
+			return managedClient;
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
 			e.printStackTrace();
+			throw new RuntimeException("Erro ao salvar ou atualizar cliente.");
 		} finally {
 			session.close();
 		}
@@ -30,7 +32,7 @@ public class ClientDAO {
 	
 	
 	public Client findById(Long id) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = session();
 		
 		try {
 			return session.get(Client.class, id);
@@ -43,7 +45,7 @@ public class ClientDAO {
 	}
 	
 	public void delete(Client client) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = session();
 		Transaction transaction = null;
 		
 		try {
@@ -62,7 +64,7 @@ public class ClientDAO {
 	}
 	
 	public List<Client> findAll() {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = session();
 		try {
 			return session.createQuery("FROM Client", Client.class).list();
 		} catch (Exception e) {
@@ -71,6 +73,12 @@ public class ClientDAO {
 		} finally {
 			session.close();
 		}
+	}
+
+
+	private Session session() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		return session;
 	}
 
 }

@@ -30,8 +30,7 @@ public class MainFrame extends JFrame {
 		this.setSize(900, 600);
 		this.setLocationRelativeTo(null);
 		initComponents();
-		buildUI();
-		
+		buildUI();	
 	}
 	
 	
@@ -65,8 +64,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		tabbedPane.addTab("Cadastro / Edição", clientFormPanel);
-		tabbedPane.addTab("Listagem de clientes", clientTablePanel);
+		tabbedPane.addTab("Cadastro / Edição de Clientes", clientFormPanel);
+		tabbedPane.addTab("Listagem de Clientes", clientTablePanel);
 		
 	
 		
