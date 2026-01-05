@@ -11,7 +11,7 @@ import com.biblioteca.domain.Client;
 public class ClientDAO {
 	
 	public Client saveOrUpdate(Client client) {
-		Session session = session();
+		Session session = sessionBegin();
 		Transaction transaction = null;
 		
 		try {
@@ -32,7 +32,7 @@ public class ClientDAO {
 	
 	
 	public Client findById(Long id) {
-		Session session = session();
+		Session session = sessionBegin();
 		
 		try {
 			return session.get(Client.class, id);
@@ -45,7 +45,7 @@ public class ClientDAO {
 	}
 	
 	public void delete(Client client) {
-		Session session = session();
+		Session session = sessionBegin();
 		Transaction transaction = null;
 		
 		try {
@@ -64,7 +64,7 @@ public class ClientDAO {
 	}
 	
 	public List<Client> findAll() {
-		Session session = session();
+		Session session = sessionBegin();
 		try {
 			return session.createQuery("FROM Client", Client.class).list();
 		} catch (Exception e) {
@@ -76,9 +76,9 @@ public class ClientDAO {
 	}
 
 
-	private Session session() {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		return session;
+	private Session sessionBegin() {
+		Session sessionBegin = HibernateUtil.getSessionFactory().openSession();
+		return sessionBegin;
 	}
 
 }

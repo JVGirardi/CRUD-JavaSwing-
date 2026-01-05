@@ -1,10 +1,13 @@
 package com.biblioteca.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,6 +23,9 @@ public class Autor {
 	
 	@Column(name = "nationality", nullable = false)
 	private String nationality;
+	
+	@OneToMany(mappedBy = "autor")
+	private List<Livro> livros;
 
 	public Long getId() {
 		return id;

@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
 		loginPanel = new LoginPanel();
 		
 		loginPanel.setOnLoginSuccess(() -> {
-			cardLayout.show(mainPanel, "Sistema");
+			cardLayout.show(mainPanel, "Gestao de Cadastros");
 		});
 		
 		tabbedPane = new JTabbedPane();
