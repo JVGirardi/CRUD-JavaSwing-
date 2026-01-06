@@ -8,17 +8,17 @@ import org.hibernate.Transaction;
 import com.biblioteca.domain.Autor;
 
 public class AutorDAO {
-	
+
 	public Autor saveOrUpdate(Autor autor) {
 		Session session = sessionBegin();
 		Transaction transaction = null;
-		
+
 		try {
 			transaction = session.beginTransaction();
 			Autor mergedAutor = session.merge(autor);
 			transaction.commit();
 			return mergedAutor;
-			
+
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -30,10 +30,9 @@ public class AutorDAO {
 		}
 	}
 
-	
 	public Autor finbById(Long id) {
 		Session session = sessionBegin();
-	
+
 		try {
 			return session.get(Autor.class, id);
 		} catch (Exception e) {
@@ -42,13 +41,13 @@ public class AutorDAO {
 		} finally {
 			session.close();
 		}
-		
+
 	}
-	
+
 	public void delete(Autor autor) {
 		Session session = sessionBegin();
 		Transaction transaction = null;
-		
+
 		try {
 			transaction = session.beginTransaction();
 			session.remove(autor);
@@ -62,29 +61,23 @@ public class AutorDAO {
 			session.close();
 		}
 	}
-	
-	public List<Autor> listAll() {
+
+	public List<Autor> findAll() {
 		Session session = sessionBegin();
-		
+
 		try {
 			return session.createQuery("FROM Autor", Autor.class).list();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-			
+
 		} finally {
 			session.close();
 		}
-		
-		
+
 	}
-	
-	
-	
-	
-	
-	
+
 	private Session sessionBegin() {
 		return HibernateUtil.getSessionFactory().openSession();
 	}

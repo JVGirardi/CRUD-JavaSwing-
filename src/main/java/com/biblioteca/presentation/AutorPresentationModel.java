@@ -6,6 +6,8 @@ import com.jgoodies.binding.value.ValueModel;
 
 public class AutorPresentationModel extends PresentationModel<Autor> {
 	
+	private static final long serialVersionUID = 1L; 
+	
 	public AutorPresentationModel(Autor autor) {
 		super(autor);
 	}
