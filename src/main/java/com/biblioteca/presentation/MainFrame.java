@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
 		loginPanel = new LoginPanel();
 		
 		loginPanel.setOnLoginSuccess(() -> {
-			cardLayout.show(mainPanel, "Gestao de Cadastros");
+			cardLayout.show(mainPanel, "Sistema");
 		});
 		
 		tabbedPane = new JTabbedPane();
@@ -80,8 +80,6 @@ public class MainFrame extends JFrame {
 		cardLayout.show(mainPanel, "Login");
 		
 	}
-	
-	
 	
 	public static void main(String[] args) {
         try {

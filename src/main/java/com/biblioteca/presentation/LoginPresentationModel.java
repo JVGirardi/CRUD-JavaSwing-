@@ -31,7 +31,6 @@ public class LoginPresentationModel {
 		String loginDigitado = usuarioBean.getLogin();
 		
 		Usuario usuario = dao.findByLogin(loginDigitado);
-		
 		return (usuario != null && dao.validarSenha(usuario, senhaDigitada));
 		
 	}

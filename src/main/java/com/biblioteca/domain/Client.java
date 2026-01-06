@@ -13,10 +13,8 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "client")
-public class Client {
+public class Client extends AbstractBean{
 	
-	@Transient
-	private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,15 +29,6 @@ public class Client {
 	@Column(name = "phone", nullable = false)
 	private String phone;
 	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		changeSupport.addPropertyChangeListener(listener);
-	}
-	
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		changeSupport.removePropertyChangeListener(listener);
-	}
-	
-	
 	public Client() {
 		super();
 	}
@@ -51,7 +40,7 @@ public class Client {
 	public void setId(Long id) {
 		Long oldId = this.id;
 		this.id = id;
-		changeSupport.firePropertyChange("id", oldId, id);
+		firePropertyChange("id", oldId, id);
 	}
 
 	public String getName() {

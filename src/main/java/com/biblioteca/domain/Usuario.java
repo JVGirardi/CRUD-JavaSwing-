@@ -1,5 +1,6 @@
 package com.biblioteca.domain;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -16,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario extends AbstractBean{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +29,6 @@ public class Usuario {
 	@Column(name = "senha", nullable = false)
 	private String password;
 	
-	@Transient
-	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-	
 
 	public Usuario() {
 		super();
@@ -41,14 +39,6 @@ public class Usuario {
 		this.login = login;
 		this.password = password;
 	}
-	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-	
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
 
 	public Long getId() {
 		return id;

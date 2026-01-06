@@ -43,6 +43,10 @@ public class ClientPresentationModel extends PresentationModel<Client> {
 		}
 		return erros.toString();
 	}
+	
+	public void limpar() {
+		this.setBean(new Client());
+	}
 
 	private boolean verificar(String string) {
 		return string == null || string.trim().isEmpty();

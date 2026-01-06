@@ -1,5 +1,9 @@
 package com.biblioteca.domain;
 
+import java.sql.Types;
+
+import org.hibernate.annotations.JdbcTypeCode;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "livro")
-public class Livro {
+public class Livro extends AbstractBean{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +30,7 @@ public class Livro {
 	@JoinColumn(name= "autor_id") //coluna FK na tabela
 	private Autor autor;
 	
+	//pergunta
 	@Column(name = "isbn", nullable = false, unique = true)
 	private String isbn;
 	
@@ -33,6 +38,7 @@ public class Livro {
 	private Integer publicationYear;
 	
 	@Lob
+	@JdbcTypeCode(Types.VARBINARY)
 	@Column(name = "image")
 	private byte[] capaImagem;
 	
@@ -49,7 +55,9 @@ public class Livro {
 	}
 
 	public void setId(Long id) {
+		Long oldId = this.id;
 		this.id = id;
+		changeSupport.firePropertyChange("id", oldId, id);
 	}
 
 	public String getTitulo() {
@@ -57,7 +65,9 @@ public class Livro {
 	}
 
 	public void setTitulo(String titulo) {
+		String oldTitulo = this.titulo;
 		this.titulo = titulo;
+		changeSupport.firePropertyChange("titulo", oldTitulo, titulo);
 	}
 
 	public Autor getAutor() {
@@ -65,7 +75,9 @@ public class Livro {
 	}
 
 	public void setAutor(Autor autor) {
+		Autor oldAutor = this.autor;
 		this.autor = autor;
+		changeSupport.firePropertyChange("autor", oldAutor, autor);
 	}
 
 	public String getIsbn() {
@@ -73,7 +85,9 @@ public class Livro {
 	}
 
 	public void setIsbn(String isbn) {
+		String oldIsbn = this.isbn;
 		this.isbn = isbn;
+		changeSupport.firePropertyChange("isbn", oldIsbn, isbn);
 	}
 
 	public Integer getPublicationYear() {
@@ -81,7 +95,9 @@ public class Livro {
 	}
 
 	public void setPublicationYear(Integer publicationYear) {
+		Integer oldPublicationYear = this.publicationYear;
 		this.publicationYear = publicationYear;
+		changeSupport.firePropertyChange("year", oldPublicationYear, publicationYear);
 	}
 
 	public byte[] getCapaImagem() {
@@ -89,7 +105,9 @@ public class Livro {
 	}
 
 	public void setCapaImagem(byte[] capaImagem) {
+		byte[] oldCapaImagem = this.capaImagem;
 		this.capaImagem = capaImagem;
+		changeSupport.firePropertyChange("image", oldCapaImagem, capaImagem);
 	}
 
 	public Genero getGenero() {
@@ -97,7 +115,9 @@ public class Livro {
 	}
 
 	public void setGenero(Genero genero) {
+		Genero oldGenero = this.genero;
 		this.genero = genero;
+		changeSupport.firePropertyChange("genero", oldGenero, genero);
 	}
 	
 	

@@ -17,9 +17,6 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<mapping class="com.biblioteca.domain.Usuario"/>
 		<mapping class="com.biblioteca.domain.Client"/>
-		<mapping class="com.biblioteca.domain.Livro"/>
-		<mapping class="com.biblioteca.domain.Genero"/>
-		<mapping class="com.biblioteca.domain.Autor"/>
 		
 		
         </session-factory>

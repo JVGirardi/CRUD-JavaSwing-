@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "genero")
-public class Genero {
+public class Genero extends AbstractBean{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,9 @@ public class Genero {
 	}
 
 	public void setId(Long id) {
+		Long oldId = id;
 		this.id = id;
+		changeSupport.firePropertyChange("id", oldId, id);
 	}
 
 	public String getNome() {
@@ -38,11 +40,14 @@ public class Genero {
 	}
 
 	public void setNome(String nome) {
+		String oldNome = nome;
 		this.nome = nome;
+		changeSupport.firePropertyChange("nome", oldNome, nome);
 	}
 
-	public Genero() {
+	public Genero(String nome) {
 		super();
+		this.nome = nome;
 	}
 	
 	

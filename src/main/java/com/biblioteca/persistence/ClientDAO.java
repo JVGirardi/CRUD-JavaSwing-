@@ -1,5 +1,7 @@
 package com.biblioteca.persistence;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -69,7 +71,7 @@ public class ClientDAO {
 			return session.createQuery("FROM Client", Client.class).list();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Collections.emptyList();
 		} finally {
 			session.close();
 		}

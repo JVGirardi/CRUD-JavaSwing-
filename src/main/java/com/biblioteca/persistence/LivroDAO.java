@@ -31,7 +31,6 @@ public class LivroDAO {
 	
 	public Livro findbyId(Long id) {
 		Session session = sessionBegin();
-		Transaction transaction = null;
 		
 		try {
 			return session.get(Livro.class, id);
