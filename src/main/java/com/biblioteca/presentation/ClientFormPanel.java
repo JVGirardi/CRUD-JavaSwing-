@@ -32,7 +32,7 @@ public class ClientFormPanel extends JPanel {
 	
 	private Runnable onSaveCallback;
 	
-	private JLabel idField;
+	private JTextField idField;
 	private JTextField nameField;
 	private JTextField emailField;
 	private JTextField phoneField;
@@ -62,25 +62,9 @@ public class ClientFormPanel extends JPanel {
 		nameField = BasicComponentFactory.createTextField(clientModel.getNameModel());
 		emailField = BasicComponentFactory.createTextField(clientModel.getEmailModel());
 		phoneField = BasicComponentFactory.createTextField(clientModel.getPhoneNumber());
-		idField = BasicComponentFactory.createLabel(
-			    new ConverterValueModel(clientModel.getId(), new BindingConverter() {
-			        @Override 
-			        public Object targetValue(Object sourceValue) {
-			            return sourceValue == null ? "" : sourceValue.toString();
-			        }
-
-			        @Override
-			        public Object sourceValue(Object targetValue) {
-			            try {
-			                return (targetValue == null || targetValue.toString().isEmpty()) 
-			                       ? null 
-			                       : Long.valueOf(targetValue.toString());	
-			            } catch (NumberFormatException e) {
-			                return null;
-			            }
-			        }
-			    })
-			);
+		idField = BasicComponentFactory.createLongField(clientModel.getId());
+		idField.setEditable(false);
+		idField.setEnabled(false);
 		
 		registerButton = new JButton("Salvar");
 		cleanButton = new JButton("Limpar");

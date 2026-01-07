@@ -1,16 +1,17 @@
 package com.biblioteca.domain;
 
-import java.beans.PropertyChangeSupport;
 import java.util.List;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "autor")
@@ -23,20 +24,19 @@ public class Autor extends AbstractBean {
 	@Column(name = "name", nullable = false)
 	private String name;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "nationality", nullable = false)
-	private String nationality;
+	private Nacionalidade nationality;
 	
 	@OneToMany(mappedBy = "autor")
 	private List<Livro> livros;
 	
-	public Autor(String name, String nationality) {
+	public Autor(String name, Nacionalidade nationality) {
 		super();
 		this.name = name;
 		this.nationality = nationality;
 	}
 
-	
-	
 	public Long getId() {
 		return id;
 	}
@@ -57,12 +57,12 @@ public class Autor extends AbstractBean {
 		changeSupport.firePropertyChange("name", oldName, name);
 	}
 
-	public String getNationality() {
+	public Nacionalidade getNationality() {
 		return nationality;
 	}
 
-	public void setNationality(String nationality) {
-		String oldNationality = this.nationality;
+	public void setNationality(Nacionalidade nationality) {
+		Nacionalidade oldNationality = this.nationality;
 		this.nationality = nationality;
 		changeSupport.firePropertyChange("nationality", oldNationality, nationality);
 	}

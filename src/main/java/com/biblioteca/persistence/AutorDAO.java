@@ -66,7 +66,7 @@ public class AutorDAO {
 		Session session = sessionBegin();
 
 		try {
-			return session.createQuery("FROM Autor", Autor.class).list();
+			return session.createQuery("SELECT DISTINCT a FROM Autor a LEFT JOIN FETCH a.livros	", Autor.class).list();
 
 		} catch (Exception e) {
 			e.printStackTrace();

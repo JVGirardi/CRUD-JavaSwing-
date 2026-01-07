@@ -1,7 +1,9 @@
 package com.biblioteca.presentation;
 
 import com.biblioteca.domain.Autor;
+import com.biblioteca.domain.Nacionalidade;
 import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
 
 public class AutorPresentationModel extends PresentationModel<Autor> {
@@ -20,6 +22,15 @@ public class AutorPresentationModel extends PresentationModel<Autor> {
 		return getModel("nationality");
 	}
 	
+	public SelectionInList<Nacionalidade> getNacionalidadeSelection() {
+	    // Cria uma lista de seleção com todas as opções do Enum e vincula ao modelo da nacionalidade
+	    return new SelectionInList<>(Nacionalidade.values(), getNationalityModel());
+	}
+	
+	public ValueModel getId() {
+		return getModel("id");
+	}
+	
 	public void limpar() {
 		this.setBean(new Autor());
 	}
@@ -31,7 +42,7 @@ public class AutorPresentationModel extends PresentationModel<Autor> {
 		if (validar(selecionado.getName())) {
 			erros.append(" - Nome \n");
 		}
-		if  (validar(selecionado.getNationality())) {
+		if  (selecionado.getNationality() == null) {
 			erros.append(" - Nacionalidade \n");
 		}
 		return erros.toString();

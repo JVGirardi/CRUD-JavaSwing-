@@ -1,9 +1,12 @@
 package com.biblioteca.presentation;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -107,6 +110,12 @@ public class ClientTablePanel extends JPanel {
 	}
 	
 	public void buildTablePanel() {
+		this.setBorder(new EmptyBorder(20, 20, 10, 20));
+		JLabel titleLabel = new JLabel("Listagem de Clientes");
+		titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		titleLabel.setForeground(new Color(50, 50, 50));
+		
+		this.add(titleLabel, BorderLayout.NORTH);
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		ButtonBarBuilder btnBuilder = new ButtonBarBuilder();
 		btnBuilder.addGlue();

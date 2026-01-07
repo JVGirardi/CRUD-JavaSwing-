@@ -2,6 +2,7 @@ package com.biblioteca.presentation;
 
 import com.biblioteca.domain.Client;
 import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.value.ConverterFactory;
 import com.jgoodies.binding.value.ValueModel;
 
 public class ClientPresentationModel extends PresentationModel<Client> {
@@ -27,6 +28,7 @@ public class ClientPresentationModel extends PresentationModel<Client> {
 	public ValueModel getId() {
 		return getModel("id");
 	}
+	
 	
 	public String getErrosValidacao() {
 		StringBuilder erros = new StringBuilder();
