@@ -1,15 +1,14 @@
 package com.biblioteca.domain;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "client")
@@ -28,6 +27,10 @@ public class Client extends AbstractBean{
 	
 	@Column(name = "phone", nullable = false)
 	private String phone;
+	
+	@OneToMany(mappedBy = "client")
+	
+	private List<Emprestimo> emprestimos;
 	
 	public Client() {
 		super();

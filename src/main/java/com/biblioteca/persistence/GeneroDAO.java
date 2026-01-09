@@ -1,5 +1,6 @@
 package com.biblioteca.persistence;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -69,7 +70,7 @@ public class GeneroDAO {
 			return session.createQuery("FROM Genero", Genero.class).list();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Collections.emptyList();
 		} finally {
 			session.close();
 		}

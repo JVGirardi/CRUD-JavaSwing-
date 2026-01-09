@@ -1,5 +1,6 @@
 package com.biblioteca.persistence;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -63,13 +64,13 @@ public class LivroDAO {
 	public List<Livro> findAll() {
 		Session session = sessionBegin();
 		try {
-			String hql = "FROM livro l " +
-		"JOIN FETCH l.autor " +
-					"JOIN FETCH l.genero";
+			String hql = "FROM Livro l " +
+		"LEFT JOIN FETCH l.autor " +
+					"LEFT JOIN FETCH l.genero";
 			return session.createQuery(hql, Livro.class).list();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Collections.emptyList();
 		} finally {
 			session.close();
 		}

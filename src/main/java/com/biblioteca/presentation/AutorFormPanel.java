@@ -35,10 +35,20 @@ public class AutorFormPanel extends JPanel{
 	private JButton saveButton;
 	private JButton cleanButton;
 	
+	private Runnable onSaveCallBack;
+	
 	public AutorFormPanel() {
 		initComponents();
 		buildPanel();
 		initListeners();
+	}
+	
+	public void setOnSaveCallBack(Runnable onSaveCallBack) {
+		this.onSaveCallBack = onSaveCallBack;
+	}
+	
+	public void setAutor(Autor autor) {
+		autorModel.setBean(autor);
 	}
 	
 	private void initComponents() {
@@ -85,9 +95,8 @@ public class AutorFormPanel extends JPanel{
 		barBuilder.addRelatedGap();
 		barBuilder.addButton(saveButton);
 		
-		JPanel buttonBarPanel = new JPanel();
+		JPanel buttonBarPanel = barBuilder.getPanel();
 		buttonBarPanel.setBorder(new EmptyBorder(20,20,20,20));
-		buttonBarPanel.add(barBuilder.getPanel());
 		
 		this.setLayout(new BorderLayout());
 		this.add(headerPanel, BorderLayout.NORTH);
@@ -124,12 +133,17 @@ public class AutorFormPanel extends JPanel{
 				Autor autorSaved = dao.saveOrUpdate(autorModel.getBean());
 				autorModel.setBean(autorSaved);
 				JOptionPane.showMessageDialog(this, "O autor " + autorModel.getNameModel().getValue().toString() + "foi cadastrado com sucesso");
+				
+				if (onSaveCallBack != null) {
+					onSaveCallBack.run();
+				}
 				autorModel.setBean(new Autor());
 				
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
 			}
 		});
+		
 	}
 	
 	

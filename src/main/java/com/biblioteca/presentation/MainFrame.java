@@ -22,6 +22,8 @@ public class MainFrame extends JFrame {
 	private LoginPanel loginPanel;
 	private ClientFormPanel clientFormPanel;
 	private ClientTablePanel clientTablePanel;
+	private AutorFormPanel autorFormPanel;
+	private AutorTablePanel autorTablePanel;
 	
 	private JTabbedPane tabbedPane;
 	
@@ -54,18 +56,33 @@ public class MainFrame extends JFrame {
 			tabbedPane.setSelectedIndex(1);
 		});
 		
-		clientTablePanel = new ClientTablePanel(new ClientTablePanel.ListListener() {
-			
-			@Override
-			public void onEdit(Client client) {
-				clientFormPanel.setClient(client);
-				tabbedPane.setSelectedIndex(0);
+		clientTablePanel = new ClientTablePanel(c -> {
+			clientFormPanel.setClient(c);
+			tabbedPane.setSelectedIndex(0);
 				
-			}
-		});
+			});
 		
 		tabbedPane.addTab("Cadastro / Edição de Clientes", clientFormPanel);
 		tabbedPane.addTab("Listagem de Clientes", clientTablePanel);
+		
+		
+		autorFormPanel = new AutorFormPanel();
+		
+		autorFormPanel.setOnSaveCallBack(() -> {
+			autorTablePanel.refreshTable();
+			tabbedPane.setSelectedIndex(2);
+		});
+		
+		autorTablePanel = new AutorTablePanel(a -> { //a = listModel.getSelection().getValue()
+			autorFormPanel.setAutor(a);
+			tabbedPane.setSelectedIndex(3);
+		});
+		
+		
+		
+		tabbedPane.addTab("Listagem de autores", autorTablePanel);
+		tabbedPane.addTab("Cadastro / Edição de autores", autorFormPanel);
+		
 		
 	
 		

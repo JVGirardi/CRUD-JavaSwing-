@@ -84,10 +84,10 @@ public class ClientTablePanel extends JPanel {
 				Client clienteSelecionado = listModel.getSelection().getValue();
 				int opt = JOptionPane.showConfirmDialog(this, 
 						"Deseja mesmo excluir?\n" +
-				"ID: [" + clienteSelecionado.getId() + " ]\n" +
-								"Nome: [" + clienteSelecionado.getName() + "]\n" +
-				"E-mail: [" + clienteSelecionado.getEmail() + "]\n" +
-			"Número de Celular: [" + clienteSelecionado.getPhone() + "]", "Deletar Cliente", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				"ID: " + clienteSelecionado.getId() + " \n" +
+								"Nome: " + clienteSelecionado.getName() + "\n" +
+				"E-mail: " + clienteSelecionado.getEmail() + "\n" +
+			"Número de Celular: " + clienteSelecionado.getPhone(), "Deletar Cliente", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (opt == JOptionPane.YES_OPTION) {
 					listModel.deleteSelection();
 					refreshTable();

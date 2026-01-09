@@ -1,5 +1,6 @@
 package com.biblioteca.persistence;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -30,7 +31,7 @@ public class AutorDAO {
 		}
 	}
 
-	public Autor finbById(Long id) {
+	public Autor finById(Long id) {
 		Session session = sessionBegin();
 
 		try {
@@ -70,8 +71,7 @@ public class AutorDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
-
+			return Collections.emptyList();
 		} finally {
 			session.close();
 		}

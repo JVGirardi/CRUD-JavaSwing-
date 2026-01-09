@@ -1,6 +1,7 @@
 package com.biblioteca.domain;
 
 import java.sql.Types;
+import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
 
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -45,7 +47,11 @@ public class Livro extends AbstractBean{
 	@ManyToOne
 	@JoinColumn(name = "genero_id") //coluna FK na tabela
 	private Genero genero;
+	
+	@OneToMany(mappedBy = "livro")
+	private List<Emprestimo> emprestimos;
 
+	
 	public Livro() {
 		super();
 	}
