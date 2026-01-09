@@ -79,7 +79,7 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 		this.setBean(new Livro());
 	}
 	
-	public void carregarImagem(File arquivo) {
+	public void converterImagemParaBytes(File arquivo) {
 		try {
 			byte[] bytes = Files.readAllBytes(arquivo.toPath());
 			getImageModel().setValue(bytes);
@@ -87,5 +87,25 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean validarImagem(File arquivo) {
+		if (arquivo == null) {
+			return false;
+		}
+		String tipoDoArquivo = arquivo.getName();
+		boolean eJPG = tipoDoArquivo.toLowerCase().endsWith(".jpg");
+		boolean png = tipoDoArquivo.toLowerCase().endsWith(".png");
+		boolean jpeg = tipoDoArquivo.toLowerCase().endsWith(".jpeg");
+		boolean imagens = tipoDoArquivo.toLowerCase().endsWith(".imagens");
+		
+		if (eJPG || png || jpeg || imagens) {
+			return true; 			
+		}
+		return false;
+		
+	}
+	
+	
+	
 	
 }
