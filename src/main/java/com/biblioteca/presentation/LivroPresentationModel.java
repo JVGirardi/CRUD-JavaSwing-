@@ -1,17 +1,28 @@
 package com.biblioteca.presentation;
 
-import com.biblioteca.domain.Client;
+import java.io.File;
+import java.nio.file.Files;
+
+import com.biblioteca.domain.Autor;
+import com.biblioteca.domain.EnumGenero;
 import com.biblioteca.domain.Livro;
 import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.beans.BeanAdapter;
+import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
 
 public class LivroPresentationModel extends PresentationModel<Livro> {
+	
 	
 	public LivroPresentationModel(Livro livro) {
 		super(livro);
 	}
 	
-	public ValueModel getId() {
+	public SelectionInList<EnumGenero> getGeneroSelection() {
+	    return new SelectionInList<>(EnumGenero.values(), getGeneroModel());
+	}
+	
+	public ValueModel getIdModel() {
 		return getModel("id");
 	}
 	
@@ -48,9 +59,6 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 		if (livro.getAutor() == null) {
 			erros.append(" - Autor \n");
 		}
-		if (validar(livro.getIsbn())) {
-			erros.append(" - ISBN \n");
-		}
 		if (livro.getPublicationYear() == null) {
 			erros.append(" - Ano \n");
 		}
@@ -69,6 +77,15 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 	
 	public void limpar() {
 		this.setBean(new Livro());
+	}
+	
+	public void carregarImagem(File arquivo) {
+		try {
+			byte[] bytes = Files.readAllBytes(arquivo.toPath());
+			getImageModel().setValue(bytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -1,6 +1,6 @@
 package com.biblioteca.domain;
 
-public enum EnumGeneros {
+public enum EnumGenero {
 	ROMANCE("Romance"),
 	FICCAO("Ficcao"),
 	SUSPENSE("Suspense"),
@@ -11,7 +11,7 @@ public enum EnumGeneros {
 	
 	private final String descricao;
 	
-	EnumGeneros(String descricao) {
+	EnumGenero(String descricao) {
 		this.descricao = descricao;
 	}
 	

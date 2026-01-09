@@ -27,7 +27,7 @@ public class AutorPresentationModel extends PresentationModel<Autor> {
 	    return new SelectionInList<>(Nacionalidade.values(), getNationalityModel());
 	}
 	
-	public ValueModel getId() {
+	public ValueModel getIdModel() {
 		return getModel("id");
 	}
 	

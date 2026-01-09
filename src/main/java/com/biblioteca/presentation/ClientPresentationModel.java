@@ -25,7 +25,7 @@ public class ClientPresentationModel extends PresentationModel<Client> {
 		return getModel("phone");
 	}
 	
-	public ValueModel getId() {
+	public ValueModel getIdModel() {
 		return getModel("id");
 	}
 	

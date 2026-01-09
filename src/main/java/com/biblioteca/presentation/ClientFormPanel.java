@@ -62,7 +62,7 @@ public class ClientFormPanel extends JPanel {
 		nameField = BasicComponentFactory.createTextField(clientModel.getNameModel());
 		emailField = BasicComponentFactory.createTextField(clientModel.getEmailModel());
 		phoneField = BasicComponentFactory.createTextField(clientModel.getPhoneNumber());
-		idField = BasicComponentFactory.createLongField(clientModel.getId());
+		idField = BasicComponentFactory.createLongField(clientModel.getIdModel());
 		idField.setEditable(false);
 		idField.setEnabled(false);
 		

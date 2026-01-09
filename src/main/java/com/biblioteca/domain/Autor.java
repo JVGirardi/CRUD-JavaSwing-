@@ -2,7 +2,6 @@ package com.biblioteca.domain;
 
 import java.util.List;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -79,6 +78,12 @@ public class Autor extends AbstractBean {
 
 	public Autor() {
 		super();
+	}
+	
+	@Override
+	public String toString() {
+		String nac = nationality != null ? nationality.toString() : " Indisponível ";
+		return name + " - " + nac;
 	}
 	
 	

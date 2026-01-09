@@ -19,8 +19,7 @@
 		<mapping class="com.biblioteca.domain.Client"/>
 		<mapping class="com.biblioteca.domain.Autor"/>
 		<mapping class="com.biblioteca.domain.Livro"/>
-		<mapping class="com.biblioteca.domain.Genero"/>
-		
+		<mapping class="com.biblioteca.domain.Emprestimo"/>
 		
         </session-factory>
 </hibernate-configuration>

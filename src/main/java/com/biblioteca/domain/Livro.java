@@ -7,6 +7,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,9 +46,9 @@ public class Livro extends AbstractBean{
 	@Column(name = "image")
 	private byte[] capaImagem;
 	
-	@ManyToOne
-	@JoinColumn(name = "genero_id") //coluna FK na tabela
-	private Genero genero;
+	@Enumerated(EnumType.STRING)
+	@JoinColumn(name = "genero", nullable = false) 
+	private EnumGenero genero;
 	
 	@OneToMany(mappedBy = "livro")
 	private List<Emprestimo> emprestimos;
@@ -116,19 +118,14 @@ public class Livro extends AbstractBean{
 		changeSupport.firePropertyChange("image", oldCapaImagem, capaImagem);
 	}
 
-	public Genero getGenero() {
+	public EnumGenero getGenero() {
 		return genero;
 	}
 
-	public void setGenero(Genero genero) {
-		Genero oldGenero = this.genero;
+	public void setGenero(EnumGenero genero) {
+		EnumGenero oldGenero = this.genero;
 		this.genero = genero;
 		changeSupport.firePropertyChange("genero", oldGenero, genero);
 	}
 	
-	
-	
-	
-	
-
 }

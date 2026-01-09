@@ -17,7 +17,5 @@ public enum Nacionalidade {
 	public String toString() {
 		return descricao;
 	}
-	
-	
 
 }

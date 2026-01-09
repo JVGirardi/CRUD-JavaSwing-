@@ -56,7 +56,7 @@ public class AutorFormPanel extends JPanel{
 		
 		nameTextField = BasicComponentFactory.createTextField(autorModel.getNameModel());
 		nationalityComboBox = BasicComponentFactory.createComboBox(autorModel.getNacionalidadeSelection());
-		idField = BasicComponentFactory.createLongField(autorModel.getId());
+		idField = BasicComponentFactory.createLongField(autorModel.getIdModel());
 		idField.setEditable(false);
 		idField.setEnabled(false);
 		
