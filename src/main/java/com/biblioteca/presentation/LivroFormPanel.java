@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -30,13 +31,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.biblioteca.domain.Autor;
 import com.biblioteca.domain.EnumGenero;
 import com.biblioteca.domain.Livro;
-import com.biblioteca.domain.Nacionalidade; 
+import com.biblioteca.domain.Nacionalidade;
+import com.biblioteca.persistence.AutorDAO;
 import com.biblioteca.persistence.LivroDAO;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
+import com.jgoodies.forms.factories.CC;
 import com.jgoodies.forms.layout.FormLayout;
 
 public class LivroFormPanel extends JPanel {
@@ -46,7 +49,10 @@ public class LivroFormPanel extends JPanel {
 
     private JTextField idField;
     private JTextField tituloField;
+    
     private JTextField isbnField;
+    private final String[] blocoHash = {"000","000","000","000"};
+    
     private JTextField yearField;
     private JTextField autorIdField;
     
@@ -61,6 +67,8 @@ public class LivroFormPanel extends JPanel {
     private JButton cleanButton;
     
     private Runnable onSaveCallback;
+    
+    
 
     public LivroFormPanel() {
         super(new BorderLayout());
@@ -86,13 +94,20 @@ public class LivroFormPanel extends JPanel {
         idField = BasicComponentFactory.createLongField(livroModel.getIdModel());
         idField.setEditable(false);
         idField.setEnabled(false);
-        autorIdField = new JTextField(3);
+        autorIdField = new JTextField();
         autorIdField.setEditable(false);
         autorIdField.setEnabled(false);
         
         tituloField = BasicComponentFactory.createTextField(livroModel.getTituloModel());
+        
         isbnField = BasicComponentFactory.createTextField(livroModel.getIsbnModel());
-        yearField = BasicComponentFactory.createIntegerField(livroModel.getYearModel());
+        isbnField.setEditable(false);
+        isbnField.setEnabled(false);
+        
+        NumberFormat formatoAno = NumberFormat.getInstance();
+        formatoAno.setGroupingUsed(false);
+        
+        yearField = BasicComponentFactory.createIntegerField(livroModel.getYearModel(),formatoAno);
 
         generoComboBox = BasicComponentFactory.createComboBox(livroModel.getGeneroSelection());
 
@@ -108,7 +123,7 @@ public class LivroFormPanel extends JPanel {
         imagePreviewLabel.setText("Sem Capa");
         
         selectImageButton = new JButton("Selecionar Capa");
-        removeImageButton = new JButton("X");
+        removeImageButton = new JButton("Remover Capa");
 
         saveButton = new JButton("Salvar");
         cleanButton = new JButton("Limpar");
@@ -123,33 +138,36 @@ public class LivroFormPanel extends JPanel {
         headerPanel.add(new JSeparator(), BorderLayout.SOUTH);
 
         FormLayout layout = new FormLayout(
-            "right:pref, 10dlu, fill:120dlu:grow, 20dlu, center:pref", 
-            "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p" 
+            "right:pref, 10dlu, 25dlu, 5dlu, fill:120dlu:grow, 20dlu, center:pref", //coluna	
+            "7*(p, 4dlu), p" //linha
         );
 
         DefaultFormBuilder builder = new DefaultFormBuilder(layout);
         builder.border(new EmptyBorder(20, 20, 20, 20));
-
-        builder.append("ID:", idField);
-        builder.add(imagePreviewLabel, "5, 1, 1, 7"); 
+        
+        
+        builder.append("ID:", idField, 3);
+        builder.add(imagePreviewLabel, "7, 1, 1, 7"); 
         builder.nextLine(2);
 
-        builder.append("Título:", tituloField);
+        builder.append("Título:", tituloField, 3);
         builder.nextLine(2);
      
-        
-        builder.append("Autor:", autorComboBox);
+        builder.addLabel("Autor:", CC.xy(1, 5));
+        builder.add(autorIdField, CC.xy(3,5));
+        builder.add(autorComboBox, CC.xy(5, 5));
         builder.nextLine(2);
 
-        builder.append("Gênero:", generoComboBox);
+
+        builder.append("Gênero:", generoComboBox,3);
         builder.nextLine(2);
         
-        builder.add(selectImageButton, "5, 9");
+        builder.add(selectImageButton, "7, 9");
         
-        builder.append("ISBN:", isbnField);
+        builder.append("Ano:", yearField,3);
         builder.nextLine(2);
 
-        builder.append("Ano:", yearField);
+        builder.append("ISBN:", isbnField,3);
         builder.nextLine(2);
 
         ButtonBarBuilder btnBuilder = new ButtonBarBuilder();
@@ -157,15 +175,50 @@ public class LivroFormPanel extends JPanel {
         btnBuilder.addButton(cleanButton);
         btnBuilder.addRelatedGap();
         btnBuilder.addButton(saveButton);
+        
+        JPanel buttonPanel = btnBuilder.getPanel();
+        buttonPanel.setBorder(new EmptyBorder(20,20,20,20));
+        
 
         this.add(headerPanel, BorderLayout.NORTH);
         this.add(builder.getPanel(), BorderLayout.CENTER);
-        this.add(btnBuilder.getPanel(), BorderLayout.SOUTH);
+        this.add(buttonPanel, BorderLayout.SOUTH);
     }
+    
 
     private void initListeners() {
     	
+    	livroModel.getTituloModel().addValueChangeListener(evt -> {
+    		
+    		blocoHash[0] = livroModel.gerarHashCurto(livroModel.getTituloModel().getValue());
+    		
+    		atualizarIsbn();
+    		
+    	});
+    	
+    	livroModel.getGeneroModel().addValueChangeListener(evt -> {
+    		
+    		blocoHash[2] = livroModel.gerarHashCurto(livroModel.getGeneroModel().getValue());
+    		
+    		atualizarIsbn();
+    	});
+    	
+    	livroModel.getYearModel().addValueChangeListener(evt -> {
+    		
+    		blocoHash[3] = livroModel.gerarHashCurto(livroModel.getYearModel().getValue());
+    		
+    		atualizarIsbn();
+    		
+    	});
+    	
+    	
     	livroModel.getAutorModel().addValueChangeListener(evt -> {
+    		
+    		blocoHash[1] = livroModel.gerarHashCurto(livroModel.getAutorModel().getValue());
+    		
+    		atualizarIsbn();
+    		
+    		
     		Autor novoAutor = (Autor) evt.getNewValue();
     		
     		if (novoAutor != null && novoAutor.getId() != null) {
@@ -189,6 +242,8 @@ public class LivroFormPanel extends JPanel {
                 File file = chooser.getSelectedFile();
                 if (livroModel.validarImagem(file)) {
                 	livroModel.converterImagemParaBytes(file);
+                	updateImagePreview();
+                	
                 } else {
                 	String nomeArquivo = chooser.getName(file);
                 	int indicePonto = nomeArquivo.lastIndexOf('.');
@@ -204,7 +259,8 @@ public class LivroFormPanel extends JPanel {
         saveButton.addActionListener(e -> {
             String erros = livroModel.getErrosValidacao();
             if (!erros.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Erros:\n" + erros, "Atenção", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Os seguintes campos não foram preenchidos corretamente: \n" +
+            			erros, "Campos obrigatórios", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -226,6 +282,12 @@ public class LivroFormPanel extends JPanel {
         cleanButton.addActionListener(e -> livroModel.limpar());
     }
 
+	private void atualizarIsbn() {
+		String blocoHashCompleto = String.join("-", blocoHash);
+		
+		livroModel.getIsbnModel().setValue(blocoHashCompleto);
+	}
+
     private void initImageListener() {
         livroModel.addPropertyChangeListener("capaImagem", new PropertyChangeListener() {
             @Override
@@ -236,6 +298,7 @@ public class LivroFormPanel extends JPanel {
         
         livroModel.addPropertyChangeListener("bean", e -> updateImagePreview());
     }
+    
 
     private void updateImagePreview() {
         byte[] imagemBytes = (byte[]) livroModel.getImageModel().getValue();
@@ -249,7 +312,7 @@ public class LivroFormPanel extends JPanel {
             imagePreviewLabel.setText("Sem Capa");
         }
     }
-
+    
     public static void main(String[] args) {
         try { UIManager.setLookAndFeel(new FlatLightLaf()); } catch (Exception e) {}
         SwingUtilities.invokeLater(() -> {

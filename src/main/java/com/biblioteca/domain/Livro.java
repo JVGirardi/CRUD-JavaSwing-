@@ -105,7 +105,7 @@ public class Livro extends AbstractBean{
 	public void setPublicationYear(Integer publicationYear) {
 		Integer oldPublicationYear = this.publicationYear;
 		this.publicationYear = publicationYear;
-		changeSupport.firePropertyChange("year", oldPublicationYear, publicationYear);
+		changeSupport.firePropertyChange("publicationYear", oldPublicationYear, publicationYear);
 	}
 
 	public byte[] getCapaImagem() {

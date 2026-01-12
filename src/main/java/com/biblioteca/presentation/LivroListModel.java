@@ -38,23 +38,19 @@ public class LivroListModel extends Bean {
 	}
 	
 	public void loadDados() {
-		List<Autor> autores = autorDAO.findAll();
-		autoresList.setList(autores);
 		List<Livro> livros = dao.findAll();
 		selection.setList(livros);
 	}
 	
-	public void deleteSelection() throws Exception {
-		if (selection.hasSelection()) {
-			Livro livroDeletar = selection.getValue();
-			if (livroDeletar == null) {
-				throw new Exception("Selecione um livro na tabela para excluir.");
-			} else {
-				dao.delete(livroDeletar);
+	public void deleteSelection(){
+		if (selection.hasSelection() ) {
+			try {
+				dao.delete(selection.getSelection());
 				loadDados();
 				selection.setSelection(null);
-			}
-			
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 	}
 	

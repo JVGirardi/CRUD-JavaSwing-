@@ -105,6 +105,18 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 		
 	}
 	
+	public String gerarHashCurto(Object entrada) {
+		if (entrada == null) {
+			return "000";
+		}
+		
+		int hash = Math.abs(entrada.hashCode() % 1000);
+		return String.format("%03d", hash);
+	}
+	
+	
+	
+	
 	
 	
 	
