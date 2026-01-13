@@ -13,17 +13,21 @@ import com.biblioteca.domain.Client;
 import com.formdev.flatlaf.FlatLightLaf;
 
 
-
 public class MainFrame extends JFrame {
 	
 	private CardLayout cardLayout;
 	private JPanel mainPanel;
 	
 	private LoginPanel loginPanel;
+	
 	private ClientFormPanel clientFormPanel;
 	private ClientTablePanel clientTablePanel;
+	
 	private AutorFormPanel autorFormPanel;
 	private AutorTablePanel autorTablePanel;
+	
+	private LivroFormPanel livroFormPanel;
+	private LivroTablePanel livroTablePanel;
 	
 	private JTabbedPane tabbedPane;
 	
@@ -68,6 +72,10 @@ public class MainFrame extends JFrame {
 		
 		autorFormPanel = new AutorFormPanel();
 		
+		autorFormPanel.setOnSaveLoadAutores(() -> {
+			livroFormPanel.refreshAutoresComboBox();
+		});
+		
 		autorFormPanel.setOnSaveCallBack(() -> {
 			autorTablePanel.refreshTable();
 			tabbedPane.setSelectedIndex(2);
@@ -78,14 +86,26 @@ public class MainFrame extends JFrame {
 			tabbedPane.setSelectedIndex(3);
 		});
 		
-		
-		
+	
 		tabbedPane.addTab("Listagem de autores", autorTablePanel);
 		tabbedPane.addTab("Cadastro / Edição de autores", autorFormPanel);
 		
 		
-	
+		livroFormPanel = new LivroFormPanel();
 		
+		livroFormPanel.setOnSaveCallBack(() -> {
+			livroTablePanel.refreshTable();
+			tabbedPane.setSelectedIndex(4);
+		});
+		
+		livroTablePanel = new LivroTablePanel(l -> {
+			livroFormPanel.setLivro(l);
+			tabbedPane.setSelectedIndex(5);
+		});
+		
+		tabbedPane.addTab("Listagem de Livros", livroTablePanel);
+		tabbedPane.addTab("Cadastro / Edição de Livros", livroFormPanel);
+
 	}
 	
 	public void buildUI() {

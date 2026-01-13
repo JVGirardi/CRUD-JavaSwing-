@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
+import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -42,10 +45,13 @@ public class LivroTablePanel extends JPanel {
 	private JButton refreshButton;
 	
 	private ListListener listener;
+	
+	private ImageLoaderWorker currentWorker;
+	
 
 	
 	
-	public LivroTablePanel() {
+	public LivroTablePanel(ListListener listener) {
 		this.listModel = new LivroListModel();
 		this.setLayout(new BorderLayout());
 		this.listener = listener;
@@ -53,7 +59,10 @@ public class LivroTablePanel extends JPanel {
 		initComponents();
 		initListeners();
 		buildTablePanel();
+		
 		refreshTable();
+		
+		
 		
 	}
 	
@@ -64,48 +73,75 @@ public class LivroTablePanel extends JPanel {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
+			
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				if (columnIndex == 1) return Icon.class;
+				return super.getColumnClass(columnIndex);
+			}
 		};
 		
 		table = new JTable(tableModel);
 		
 		//conecta a seleção da tabela ao SelectionInList do Model
 		table.setSelectionModel(new SingleListSelectionAdapter(listModel.getSelection().getSelectionIndexHolder()));
-		table.setRowHeight(100);
+		table.setRowHeight(80);
 		
-		DefaultTableCellRenderer standartCells = new DefaultTableCellRenderer() {
+		
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 			@Override
 			 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		        setHorizontalAlignment(CENTER);
 
-		        setFont(getFont().deriveFont(Font.BOLD));
+		        setFont(getFont().deriveFont(Font.PLAIN));
 
 		        return this;
 		    }
-		};
-		
-		table.setDefaultRenderer(Object.class, standartCells);
+		});
 		
 		
 		table.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer());
 		
-		
+		setColumnWidght(table, 0, 5);
+		setColumnWidght(table, 1, 50);
+		setColumnWidght(table, 2, 30);
+		setColumnWidght(table, 3, 30);
+		setColumnWidght(table, 4, 30);
+		setColumnWidght(table, 5, 30);
+		setColumnWidght(table, 6, 30);
+		setColumnWidght(table, 7, 70);
 		
 		editButton = new JButton("Editar");
 		deleteButton = new JButton("Remover");
-		refreshButton = new JButton("Atualizar");	
-		
-		
+		refreshButton = new JButton("Atualizar");
+	}
+	
+	private static void setColumnWidght(JTable table, int coluna, int largura) {
+		table.getColumnModel().getColumn(coluna).setPreferredWidth(largura);
 	}
 	
 	public void refreshTable() {
+		
+		if (currentWorker != null && !currentWorker.isDone()) {
+			currentWorker.cancel(true);	
+		}
+		
 		listModel.loadDados();
 		tableModel.setRowCount(0);
-		for (Livro l : listModel.getSelection().getList()) {
-			tableModel.addRow(new Object[] { l.getId(), l.getCapaImagem(), l.getTitulo(), l.getAutor().getId() + " - " + l.getAutor().getName(), 
+		
+		List<Livro> livros = listModel.getSelection().getList();
+		
+		for (Livro l : livros) {
+			tableModel.addRow(new Object[] { l.getId(), null, l.getTitulo(), l.getAutor().getId() + " - " + l.getAutor().getName(), 
 					l.getAutor().getNationality(), l.getGenero(), l.getPublicationYear(), l.getIsbn()});
 		
+		}
+		
+		if (!livros.isEmpty()) {
+			ImageLoaderWorker worker = new ImageLoaderWorker(livros);
+			worker.execute();
 		}
 		
 	}
@@ -152,6 +188,16 @@ public class LivroTablePanel extends JPanel {
 		});
 	}
 	
+	private static class CelulaImagem {
+		int linha;
+		ImageIcon imagem;
+		
+		public CelulaImagem(int linha, ImageIcon capa) {
+			this.linha = linha;
+			this.imagem = capa;
+		}
+	}
+	
 	public void buildTablePanel() {
 		this.setBorder(new EmptyBorder(20, 20, 10, 20));
 		JLabel titleLabel = new JLabel("Listagem de Livros");
@@ -183,35 +229,66 @@ public class LivroTablePanel extends JPanel {
 	        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	        
 	        setText("");
-	        setIcon(null);
-
-	        if (value instanceof byte[]) {
-	            byte[] bytes = (byte[]) value;
-	            
-	            if (bytes.length > 0) {
-	                ImageIcon icon = new ImageIcon(bytes);
-	                
-	                int alturaLinha = table.getRowHeight(row);
-	                int larguraProporcional = (alturaLinha * icon.getIconWidth()) / icon.getIconHeight();
-	                
-	                if (alturaLinha > 0) {
-	                     Image img = icon.getImage().getScaledInstance(larguraProporcional, alturaLinha, Image.SCALE_SMOOTH);
-	                     setIcon(new ImageIcon(img));
-	                } else {
-	                     setIcon(icon);
-	                }
-	            }
-	        } else if (value == null) {
-	            setText("Sem Imagem");
-	        }
-
 	        setHorizontalAlignment(CENTER);
 	        
+	        if (value instanceof Icon) {
+	        	setIcon((Icon) value);
+	        } else {
+	        	setIcon(null);
+	        	setText(value == null ? "Carregando..." : "Sem img");
+	        }
 	        setFont(getFont().deriveFont(Font.BOLD));
-	        
 	        return this;
 		}
 	}
+	
+	private class ImageLoaderWorker extends SwingWorker<Void, CelulaImagem> {
+		
+		private final List<Livro> livros;
+		private final int rowHeight;
+		
+		public ImageLoaderWorker(List<Livro> livros) {
+			this.livros = livros;
+			this.rowHeight = table.getRowHeight();
+		}
+		
+		@Override
+		protected Void doInBackground() throws Exception {
+			for (int i = 0; i < livros.size(); i++) {
+				Livro l = livros.get(i);
+			
+				byte[] imgByte = null;
+				imgByte = l.getCapaImagem();
+				
+				if (imgByte != null && imgByte.length > 0) {
+					ImageIcon icon = new ImageIcon(imgByte);
+					
+					if (icon.getIconWidth() > 0) {
+						int alturaLinha = rowHeight - 4;
+						int larguraProporcional = (alturaLinha * icon.getIconWidth() / icon.getIconHeight());
+						
+						Image imgEscalada = icon.getImage().getScaledInstance(larguraProporcional, alturaLinha, Image.SCALE_SMOOTH);
+						
+						publish(new CelulaImagem(i, new ImageIcon(imgEscalada)));
+					}
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		protected void process(List<CelulaImagem> chunks) {
+			
+			for (CelulaImagem celula : chunks) {
+				if (celula.linha < tableModel.getRowCount()) {
+					tableModel.setValueAt(celula.imagem, celula.linha, 1);
+				}
+				
+			}
+			
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		try {
@@ -221,8 +298,12 @@ public class LivroTablePanel extends JPanel {
 		}
 		SwingUtilities.invokeLater(() -> {
 			
+			LivroFormPanel livroFormPanel = new LivroFormPanel();
+			
 			JFrame frame = new JFrame("teste");
-			frame.add(new LivroTablePanel());
+			frame.add(new LivroTablePanel(l -> {
+				livroFormPanel.setLivro(l);
+			}));
 			frame.setSize(1000,500);
 			frame.setResizable(false);
 			frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);

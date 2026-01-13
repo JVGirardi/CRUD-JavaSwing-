@@ -36,11 +36,17 @@ public class AutorFormPanel extends JPanel{
 	private JButton cleanButton;
 	
 	private Runnable onSaveCallBack;
+	private Runnable onSaveLoadAutores;
+	
 	
 	public AutorFormPanel() {
 		initComponents();
 		buildPanel();
 		initListeners();
+	}
+	
+	public void setOnSaveLoadAutores(Runnable onSaveLoadAutores) {
+		this.onSaveLoadAutores = onSaveLoadAutores;
 	}
 	
 	public void setOnSaveCallBack(Runnable onSaveCallBack) {
@@ -91,9 +97,9 @@ public class AutorFormPanel extends JPanel{
 		
 		ButtonBarBuilder barBuilder = new ButtonBarBuilder();
 		barBuilder.addGlue();
-		barBuilder.addButton(cleanButton);
-		barBuilder.addRelatedGap();
 		barBuilder.addButton(saveButton);
+		barBuilder.addRelatedGap();
+		barBuilder.addButton(cleanButton);
 		
 		JPanel buttonBarPanel = barBuilder.getPanel();
 		buttonBarPanel.setBorder(new EmptyBorder(20,20,20,20));
@@ -136,6 +142,9 @@ public class AutorFormPanel extends JPanel{
 				
 				if (onSaveCallBack != null) {
 					onSaveCallBack.run();
+					
+				} if (onSaveLoadAutores != null) {
+					onSaveLoadAutores.run();
 				}
 				autorModel.setBean(new Autor());
 				

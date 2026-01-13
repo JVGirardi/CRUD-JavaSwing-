@@ -59,6 +59,8 @@ public class LivroFormPanel extends JPanel {
     private JComboBox<Autor> autorComboBox;
     private JComboBox<EnumGenero> generoComboBox;
 
+    private SelectionInList<Autor> autoresSelection;
+    
     private JLabel imagePreviewLabel;
     private JButton selectImageButton;
     private JButton removeImageButton;
@@ -68,8 +70,6 @@ public class LivroFormPanel extends JPanel {
     
     private Runnable onSaveCallback;
     
-    
-
     public LivroFormPanel() {
         super(new BorderLayout());
         initComponents();
@@ -77,9 +77,9 @@ public class LivroFormPanel extends JPanel {
         initImageListener();
         buildPanel();
     }
-
+    
     public void setOnSaveCallBack(Runnable onSaveCallback) {
-        this.onSaveCallback = onSaveCallback;
+    	this.onSaveCallback = onSaveCallback;
     }
 
     public void setLivro(Livro livro) {
@@ -89,7 +89,7 @@ public class LivroFormPanel extends JPanel {
     private void initComponents() {
         livroModel = new LivroPresentationModel(new Livro());
         listModel = new LivroListModel();
-        listModel.loadAutores(); 
+        listModel.loadAutores();
 
         idField = BasicComponentFactory.createLongField(livroModel.getIdModel());
         idField.setEditable(false);
@@ -111,7 +111,7 @@ public class LivroFormPanel extends JPanel {
 
         generoComboBox = BasicComponentFactory.createComboBox(livroModel.getGeneroSelection());
 
-        SelectionInList<Autor> autoresSelection = listModel.getAutoresList();
+        autoresSelection = listModel.getAutoresList();
         autoresSelection.setSelectionHolder(livroModel.getAutorModel());
         autorComboBox = BasicComponentFactory.createComboBox(autoresSelection);
         
@@ -127,6 +127,10 @@ public class LivroFormPanel extends JPanel {
 
         saveButton = new JButton("Salvar");
         cleanButton = new JButton("Limpar");
+    }
+    
+    public void refreshAutoresComboBox() {
+    	listModel.loadAutores();
     }
 
     private void buildPanel() {
@@ -172,9 +176,9 @@ public class LivroFormPanel extends JPanel {
 
         ButtonBarBuilder btnBuilder = new ButtonBarBuilder();
         btnBuilder.addGlue();
-        btnBuilder.addButton(cleanButton);
-        btnBuilder.addRelatedGap();
         btnBuilder.addButton(saveButton);
+        btnBuilder.addRelatedGap();
+        btnBuilder.addButton(cleanButton);
         
         JPanel buttonPanel = btnBuilder.getPanel();
         buttonPanel.setBorder(new EmptyBorder(20,20,20,20));
@@ -236,6 +240,7 @@ public class LivroFormPanel extends JPanel {
     	
         selectImageButton.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
+            chooser.setDragEnabled(true);
             chooser.setFileFilter(new FileNameExtensionFilter("Imagens", "jpg", "png", "jpeg"));
             
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -270,9 +275,11 @@ public class LivroFormPanel extends JPanel {
                 livroModel.setBean(salvo);
                 JOptionPane.showMessageDialog(this, "Livro salvo com sucesso!");
                 
-                if (onSaveCallback != null) onSaveCallback.run();
+                if (onSaveCallback != null) {
+                	onSaveCallback.run();
+                }
                 
-                livroModel.setBean(new Livro()); 
+                livroModel.setBean(new Livro());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
                 ex.printStackTrace();
