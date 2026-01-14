@@ -270,9 +270,7 @@ public class LivroFormPanel extends JPanel {
             }
 
             try {
-                LivroDAO dao = new LivroDAO();
-                Livro salvo = dao.saveOrUpdate(livroModel.getBean());
-                livroModel.setBean(salvo);
+            	livroModel.salvarLivro();
                 JOptionPane.showMessageDialog(this, "Livro salvo com sucesso!");
                 
                 if (onSaveCallback != null) {

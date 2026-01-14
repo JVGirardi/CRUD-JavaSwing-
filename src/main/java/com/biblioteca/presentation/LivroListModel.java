@@ -37,7 +37,7 @@ public class LivroListModel extends Bean {
 		autoresList.setList(autores);
 	}
 	
-	public void loadDados() {
+	public void loadLivros() {
 		List<Livro> livros = dao.findAll();
 		selection.setList(livros);
 	}
@@ -46,7 +46,7 @@ public class LivroListModel extends Bean {
 		if (selection.hasSelection() ) {
 			try {
 				dao.delete(selection.getSelection());
-				loadDados();
+				loadLivros();
 				selection.setSelection(null);
 				} catch (Exception e) {
 					e.printStackTrace();

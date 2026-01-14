@@ -18,9 +18,9 @@ public class ClientDAO {
 		
 		try {
 			transaction = session.beginTransaction();
-			Client managedClient = (Client) session.merge(client);//persist para novos cadastro, merge p para os dois
+			Client mergedClient = (Client) session.merge(client);//persist para novos cadastro, merge p para os dois
 			transaction.commit();
-			return managedClient;
+			return mergedClient;
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();

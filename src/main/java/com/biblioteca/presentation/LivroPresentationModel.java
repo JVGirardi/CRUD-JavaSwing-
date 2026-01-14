@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import com.biblioteca.domain.Autor;
 import com.biblioteca.domain.EnumGenero;
 import com.biblioteca.domain.Livro;
+import com.biblioteca.persistence.LivroDAO;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.beans.BeanAdapter;
 import com.jgoodies.binding.list.SelectionInList;
@@ -71,6 +72,14 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 		return erros.toString();
 	}
 	
+	public void salvarLivro() throws Exception {
+		LivroDAO dao = new LivroDAO();
+		Livro salvo = dao.saveOrUpdate(this.getBean());
+		this.setBean(salvo);
+		} 
+	
+	
+	
 	private boolean validar(String string) {
 		return string == null || string.trim().isEmpty();
 	}
@@ -96,9 +105,8 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 		boolean eJPG = tipoDoArquivo.toLowerCase().endsWith(".jpg");
 		boolean png = tipoDoArquivo.toLowerCase().endsWith(".png");
 		boolean jpeg = tipoDoArquivo.toLowerCase().endsWith(".jpeg");
-		boolean imagens = tipoDoArquivo.toLowerCase().endsWith(".imagens");
 		
-		if (eJPG || png || jpeg || imagens) {
+		if (eJPG || png || jpeg) {
 			return true; 			
 		}
 		return false;

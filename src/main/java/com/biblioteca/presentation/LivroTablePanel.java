@@ -128,7 +128,7 @@ public class LivroTablePanel extends JPanel {
 			currentWorker.cancel(true);	
 		}
 		
-		listModel.loadDados();
+		listModel.loadLivros();
 		tableModel.setRowCount(0);
 		
 		List<Livro> livros = listModel.getSelection().getList();

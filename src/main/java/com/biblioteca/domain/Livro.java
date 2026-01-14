@@ -34,7 +34,6 @@ public class Livro extends AbstractBean{
 	@JoinColumn(name= "autor_id") //coluna FK na tabela
 	private Autor autor;
 	
-	//pergunta
 	@Column(name = "isbn", nullable = false, unique = true)
 	private String isbn;
 	

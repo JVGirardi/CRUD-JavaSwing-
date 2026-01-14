@@ -64,8 +64,7 @@ public class LivroDAO {
 	public List<Livro> findAll() {
 		Session session = sessionBegin();
 		try {
-			String hql = "FROM Livro l " 
-		+ "LEFT JOIN FETCH l.autor ";
+			String hql = "FROM Livro l LEFT JOIN FETCH l.autor";
 			return session.createQuery(hql, Livro.class).list();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -19,7 +19,6 @@ public class AutorDAO {
 			Autor mergedAutor = session.merge(autor);
 			transaction.commit();
 			return mergedAutor;
-
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -68,7 +67,6 @@ public class AutorDAO {
 
 		try {
 			return session.createQuery("SELECT DISTINCT a FROM Autor a LEFT JOIN FETCH a.livros	", Autor.class).list();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Collections.emptyList();
