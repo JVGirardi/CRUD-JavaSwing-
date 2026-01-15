@@ -76,4 +76,9 @@ public class Client extends AbstractBean{
 		changeSupport.firePropertyChange("phone", oldPhone, phoneNumber);
 	}
 	
+	@Override
+	public String toString() {
+		return id + " - " + name;
+	}
+	
 }

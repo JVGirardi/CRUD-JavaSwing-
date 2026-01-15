@@ -132,13 +132,9 @@ public class ClientFormPanel extends JPanel {
 			
 			try {
 			
-				ClientDAO dao = new ClientDAO();
-				
-				Client savedClient = dao.saveOrUpdate(clientModel.getBean());
-				clientModel.setBean(savedClient);
-				
+				clientModel.salvar();
 				JOptionPane.showMessageDialog(this, "Cliente " + clientModel.getNameModel().getValue() + 
-						" \n cadastrado com sucesso!");
+						"\n Cadastrado com sucesso!");
 				
 				if (onSaveCallback != null) {
 					onSaveCallback.run();

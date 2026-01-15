@@ -1,6 +1,7 @@
 package com.biblioteca.presentation;
 
 import com.biblioteca.domain.Client;
+import com.biblioteca.persistence.ClientDAO;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ConverterFactory;
 import com.jgoodies.binding.value.ValueModel;
@@ -44,6 +45,13 @@ public class ClientPresentationModel extends PresentationModel<Client> {
 			erros.append(" - Telefone Celular \n");
 		}
 		return erros.toString();
+	}
+	
+	public void salvar() {
+		ClientDAO dao = new ClientDAO();
+		Client savedClient = dao.saveOrUpdate(this.getBean());
+		//atualizar o campo ID
+		this.setBean(savedClient);
 	}
 	
 	public void limpar() {

@@ -86,6 +86,10 @@ public class MainFrame extends JFrame {
 			tabbedPane.setSelectedIndex(3);
 		});
 		
+		autorTablePanel.setOnRemoveLoadAutores(() -> {
+			livroFormPanel.refreshAutoresComboBox();
+		});
+		
 	
 		tabbedPane.addTab("Listagem de autores", autorTablePanel);
 		tabbedPane.addTab("Cadastro / Edição de autores", autorFormPanel);

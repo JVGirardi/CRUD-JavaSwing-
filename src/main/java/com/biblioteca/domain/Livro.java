@@ -127,6 +127,11 @@ public class Livro extends AbstractBean{
 		changeSupport.firePropertyChange("genero", oldGenero, genero);
 	}
 	
+	@Override
+	public String toString() {
+		return id + " - " + titulo;
+	}
+	
 	
 	
 }

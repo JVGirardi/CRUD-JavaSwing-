@@ -2,21 +2,26 @@ package com.biblioteca.presentation;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.List;
 
 import com.biblioteca.domain.Autor;
 import com.biblioteca.domain.EnumGenero;
 import com.biblioteca.domain.Livro;
 import com.biblioteca.persistence.LivroDAO;
 import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.beans.BeanAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
 
 public class LivroPresentationModel extends PresentationModel<Livro> {
 	
+	private SelectionInList<Autor> autoresSelection;
+	
 	
 	public LivroPresentationModel(Livro livro) {
 		super(livro);
+		this.autoresSelection = new SelectionInList<>();
+		this.autoresSelection.setSelectionHolder(getAutorModel());
+		
 	}
 	
 	public SelectionInList<EnumGenero> getGeneroSelection() {
@@ -51,6 +56,14 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 		return getModel("genero");
 	}
 	
+	public SelectionInList<Autor> getAutoresSelection() {
+		return autoresSelection;
+	}
+
+	public void setListaAutores(List<Autor> autores) {
+		this.autoresSelection.setList(autores);
+	}
+
 	public String getErrosValidacao() {
 		StringBuilder erros = new StringBuilder();
 		Livro livro = this.getBean();

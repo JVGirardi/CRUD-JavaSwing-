@@ -62,8 +62,6 @@ public class LivroTablePanel extends JPanel {
 		
 		refreshTable();
 		
-		
-		
 	}
 	
 	public void initComponents() {

@@ -134,11 +134,9 @@ public class AutorFormPanel extends JPanel{
 			};
 			
 			try {
-				AutorDAO dao = new AutorDAO();
+				autorModel.salvar();
 				
-				Autor autorSaved = dao.saveOrUpdate(autorModel.getBean());
-				autorModel.setBean(autorSaved);
-				JOptionPane.showMessageDialog(this, "O autor " + autorModel.getNameModel().getValue().toString() + "foi cadastrado com sucesso");
+				JOptionPane.showMessageDialog(this, "O autor " + autorModel.getNameModel().getValue().toString() + " foi cadastrado com sucesso");
 				
 				if (onSaveCallBack != null) {
 					onSaveCallBack.run();

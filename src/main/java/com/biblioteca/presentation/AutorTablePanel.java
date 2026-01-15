@@ -37,6 +37,11 @@ public class AutorTablePanel extends JPanel {
 	private JButton refreshButton;
 	private JButton editButton;
 	
+	private Runnable onRemoveLoadAutores;
+	
+	public void setOnRemoveLoadAutores(Runnable onRemoveLoadAutores) {
+		this.onRemoveLoadAutores = onRemoveLoadAutores;
+	}
 	
 	public AutorTablePanel(ListListener listener) {
 		this.listener = listener;
@@ -97,6 +102,9 @@ public class AutorTablePanel extends JPanel {
 				try {
 					listModel.deleteSelection();
 					JOptionPane.showMessageDialog(this, "Autor removido com sucesso");
+					if (onRemoveLoadAutores != null) {
+						onRemoveLoadAutores.run();
+					};
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao excluir este autor", JOptionPane.ERROR_MESSAGE);
 				}

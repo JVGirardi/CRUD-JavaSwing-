@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -31,9 +29,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.biblioteca.domain.Autor;
 import com.biblioteca.domain.EnumGenero;
 import com.biblioteca.domain.Livro;
-import com.biblioteca.domain.Nacionalidade;
-import com.biblioteca.persistence.AutorDAO;
-import com.biblioteca.persistence.LivroDAO;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
@@ -73,6 +68,7 @@ public class LivroFormPanel extends JPanel {
     public LivroFormPanel() {
         super(new BorderLayout());
         initComponents();
+        refreshAutoresComboBox();
         initListeners();
         initImageListener();
         buildPanel();
@@ -89,7 +85,6 @@ public class LivroFormPanel extends JPanel {
     private void initComponents() {
         livroModel = new LivroPresentationModel(new Livro());
         listModel = new LivroListModel();
-        listModel.loadAutores();
 
         idField = BasicComponentFactory.createLongField(livroModel.getIdModel());
         idField.setEditable(false);
@@ -111,9 +106,8 @@ public class LivroFormPanel extends JPanel {
 
         generoComboBox = BasicComponentFactory.createComboBox(livroModel.getGeneroSelection());
 
-        autoresSelection = listModel.getAutoresList();
-        autoresSelection.setSelectionHolder(livroModel.getAutorModel());
-        autorComboBox = BasicComponentFactory.createComboBox(autoresSelection);
+        livroModel.setListaAutores(listModel.getAutoresList().getList());
+        autorComboBox = BasicComponentFactory.createComboBox(livroModel.getAutoresSelection());
         
 
         imagePreviewLabel = new JLabel();
@@ -131,6 +125,7 @@ public class LivroFormPanel extends JPanel {
     
     public void refreshAutoresComboBox() {
     	listModel.loadAutores();
+    	livroModel.setListaAutores(listModel.getAutoresList().getList());
     }
 
     private void buildPanel() {
@@ -222,18 +217,12 @@ public class LivroFormPanel extends JPanel {
     		
     		atualizarIsbn();
     		
-    		
     		Autor novoAutor = (Autor) evt.getNewValue();
     		
     		if (novoAutor != null && novoAutor.getId() != null) {
     			autorIdField.setText(String.valueOf(novoAutor.getId()));
     		} else {
     			autorIdField.setText("");
-    		}
-    		
-    		Autor autorAtual = (Autor) livroModel.getAutorModel().getValue();
-    		if (autorAtual != null) {
-    			autorIdField.setText(String.valueOf(autorAtual.getId()));
     		}
     	});
     	

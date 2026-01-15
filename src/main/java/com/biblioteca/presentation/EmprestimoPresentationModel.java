@@ -15,21 +15,18 @@ public class EmprestimoPresentationModel extends PresentationModel<Emprestimo> {
 	private EmprestimoService service;
 	
 	private SelectionInList<Client> clientes;
-	private SelectionInList<Livro> livrosDisponiveis;
+	private SelectionInList<Livro> livros;
 	
 	
 	public EmprestimoPresentationModel(Emprestimo emprestimo) {
 		super(emprestimo);
 		this.service = new EmprestimoService();
-	}
-	
-	public void initModels() {
-		List<Client> listaClientes = service.listarClientes();
-		List<Livro> listarLivros = service.listarLivrosDisponiveisParaEmprestimo();
 		
-		clientes = new SelectionInList<Client>(listaClientes);
-		livrosDisponiveis = new SelectionInList<Livro>(listarLivros);
+		this.clientes = new SelectionInList<>();
+		this.livros = new SelectionInList<>();
 		
+		this.clientes.setSelectionHolder(getClientModel());
+		this.livros.setSelectionHolder(getLivroModel());
 	}
 	
 	public ValueModel getIdModel() {
@@ -55,4 +52,47 @@ public class EmprestimoPresentationModel extends PresentationModel<Emprestimo> {
 	public ValueModel getDataDevolucaoEfetiva() {
 		return getModel("dataDevolucaoEfetiva");
 	}
+	
+	public void listarClientes() {
+		clientes.setList(service.listarClientes());
+	}
+	
+	public void listarLivros() {
+		livros.setList(service.listarLivrosDisponiveisParaEmprestimo());
+	}
+
+	public SelectionInList<Client> getClientes() {
+		return clientes;
+	}
+
+	public void setClientes(SelectionInList<Client> clientes) {
+		this.clientes = clientes;
+	}
+
+	public SelectionInList<Livro> getLivrosDisponiveis() {
+		return livros;
+	}
+
+	public void setLivrosDisponiveis(SelectionInList<Livro> livrosDisponiveis) {
+		this.livros = livrosDisponiveis;
+	}
+
+	public void realizarEmprestimo(Client client, Livro livro) throws Exception {
+		if (client != null && livro != null) {
+			try {
+				service.realizarEmprestimo(livro.getId(), client);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			throw new Exception("Por favor, selecione (1) cliente e (1) livro para que seja possivel realizar um emprestimo");
+		}
+	}
+	
+	public List<Emprestimo> buscarEmprestimosEmAberto() {
+		return service.listarEmprestimosEmAberto();
+	}
+	
 }
+
+

@@ -2,6 +2,7 @@ package com.biblioteca.presentation;
 
 import com.biblioteca.domain.Autor;
 import com.biblioteca.domain.Nacionalidade;
+import com.biblioteca.persistence.AutorDAO;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
@@ -46,6 +47,13 @@ public class AutorPresentationModel extends PresentationModel<Autor> {
 			erros.append(" - Nacionalidade \n");
 		}
 		return erros.toString();
+	}
+	
+	public void salvar() {
+		AutorDAO dao = new AutorDAO();
+		
+		Autor autorSaved = dao.saveOrUpdate(this.getBean());
+		this.setBean(autorSaved);
 	}
 	
 	public boolean validar(String campo) {

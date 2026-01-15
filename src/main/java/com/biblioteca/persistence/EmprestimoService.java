@@ -51,5 +51,9 @@ public class EmprestimoService {
 		return emprestimoDao.findAllLivrosDisponiveis();
 	}
 	
+	public List<Emprestimo> listarEmprestimosEmAberto() {
+		return emprestimoDao.findEmprestimoEmAberto();
+	}
+	
 
 }
