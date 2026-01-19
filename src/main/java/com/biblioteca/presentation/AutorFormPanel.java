@@ -45,10 +45,6 @@ public class AutorFormPanel extends JPanel{
 		initListeners();
 	}
 	
-	public void setOnSaveLoadAutores(Runnable onSaveLoadAutores) {
-		this.onSaveLoadAutores = onSaveLoadAutores;
-	}
-	
 	public void setOnSaveCallBack(Runnable onSaveCallBack) {
 		this.onSaveCallBack = onSaveCallBack;
 	}
@@ -141,8 +137,6 @@ public class AutorFormPanel extends JPanel{
 				if (onSaveCallBack != null) {
 					onSaveCallBack.run();
 					
-				} if (onSaveLoadAutores != null) {
-					onSaveLoadAutores.run();
 				}
 				autorModel.setBean(new Autor());
 				

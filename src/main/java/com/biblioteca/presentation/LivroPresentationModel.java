@@ -15,12 +15,14 @@ import com.jgoodies.binding.value.ValueModel;
 public class LivroPresentationModel extends PresentationModel<Livro> {
 	
 	private SelectionInList<Autor> autoresSelection;
+	private LivroDAO dao;
 	
 	
 	public LivroPresentationModel(Livro livro) {
 		super(livro);
 		this.autoresSelection = new SelectionInList<>();
 		this.autoresSelection.setSelectionHolder(getAutorModel());
+		this.dao = new LivroDAO();
 		
 	}
 	
@@ -86,12 +88,9 @@ public class LivroPresentationModel extends PresentationModel<Livro> {
 	}
 	
 	public void salvarLivro() throws Exception {
-		LivroDAO dao = new LivroDAO();
 		Livro salvo = dao.saveOrUpdate(this.getBean());
 		this.setBean(salvo);
 		} 
-	
-	
 	
 	private boolean validar(String string) {
 		return string == null || string.trim().isEmpty();

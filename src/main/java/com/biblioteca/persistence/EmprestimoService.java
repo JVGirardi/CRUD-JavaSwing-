@@ -38,6 +38,7 @@ public class EmprestimoService {
 		emprestimoDao.registrarEmprestimo(novoEmprestimo);
 	}
 	
+	
 	public void realizarDevolucao(Emprestimo emprestimo) {
 		emprestimo.setDataDevolucaoEfetiva(LocalDate.now());
 		emprestimoDao.registrarDevolucao(emprestimo);

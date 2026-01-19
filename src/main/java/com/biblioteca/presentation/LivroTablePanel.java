@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.biblioteca.domain.Emprestimo;
 import com.biblioteca.domain.Livro;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
@@ -48,8 +49,7 @@ public class LivroTablePanel extends JPanel {
 	
 	private ImageLoaderWorker currentWorker;
 	
-
-	
+	private Runnable onRemoveRefreshEmprestimo;
 	
 	public LivroTablePanel(ListListener listener) {
 		this.listModel = new LivroListModel();
@@ -62,6 +62,10 @@ public class LivroTablePanel extends JPanel {
 		
 		refreshTable();
 		
+	}
+	
+	public void setOnRemoveRefreshEmprestimo(Runnable onRemoveRefreshEmprestimo) {
+		this.onRemoveRefreshEmprestimo = onRemoveRefreshEmprestimo;
 	}
 	
 	public void initComponents() {
@@ -151,22 +155,32 @@ public class LivroTablePanel extends JPanel {
 		});
 		
 		deleteButton.addActionListener(e -> {
+			
 			if (listModel.getSelection().hasSelection()) {
 				Livro livroSelecionado = listModel.getSelection().getSelection();
-				int opc = JOptionPane.showConfirmDialog(this, "Deseja mesmo excluir? \n"
-						+ "ID: " + livroSelecionado.getTitulo() + "\n"
-						+ "Titulo: " + livroSelecionado.getTitulo() + "\n"
-						+ "Autor: " + livroSelecionado.getAutor().getName() + "\n"
-						+ "Gênero: " + livroSelecionado.getGenero() + "\n"
-						+ "Ano: " + livroSelecionado.getPublicationYear() + "\n"
-						+ "ISBN: " + livroSelecionado.getIsbn(), 
-						"Deletar cliente",
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.WARNING_MESSAGE);
-				if (opc == JOptionPane.YES_OPTION) {
-					listModel.deleteSelection();
-					refreshTable();
-					JOptionPane.showMessageDialog(this, "Excluido com sucesso!");
+				if (!listModel.isLivroDisponivel(livroSelecionado)) {
+					JOptionPane.showMessageDialog(this, "Não é possivel excluir um livro vinculado a um emprestimo.", "Erro ao excluir este livro", JOptionPane.ERROR_MESSAGE);
+				} else {
+					int opc = JOptionPane.showConfirmDialog(this, "Deseja mesmo excluir? \n"
+							+ "ID: " + livroSelecionado.getTitulo() + "\n"
+							+ "Titulo: " + livroSelecionado.getTitulo() + "\n"
+							+ "Autor: " + livroSelecionado.getAutor().getName() + "\n"
+							+ "Gênero: " + livroSelecionado.getGenero() + "\n"
+							+ "Ano: " + livroSelecionado.getPublicationYear() + "\n"
+							+ "ISBN: " + livroSelecionado.getIsbn(), 
+							"Deletar cliente",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+					if (opc == JOptionPane.YES_OPTION) {
+						try {
+							listModel.deleteSelection();
+							refreshTable();
+							onRemoveRefreshEmprestimo.run();
+							JOptionPane.showMessageDialog(this, "Livro excluido com sucesso!");
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao excluir este livro", JOptionPane.ERROR_MESSAGE);
+						}
+					}
 				}
 			} else {
 				JOptionPane.showMessageDialog(this, "Selecione um livro da lista para excluir.");
@@ -177,11 +191,15 @@ public class LivroTablePanel extends JPanel {
 		editButton.addActionListener(e -> {
 			if (listModel.getSelection().hasSelection()) {
 				Livro livroSelecionado = listModel.getSelection().getValue();
-				if (livroSelecionado != null ) {
-					listener.onEdit(livroSelecionado);
+				if (!listModel.isLivroDisponivel(livroSelecionado)) {
+					JOptionPane.showMessageDialog(this, "Não é possivel editar um livro vinculado a um emprestimo.", "Erro ao editar este livro", JOptionPane.ERROR_MESSAGE);
 				} else {
-					JOptionPane.showMessageDialog(this, "Selecione um Livro para editar.");
+					if (livroSelecionado != null ) {
+						listener.onEdit(livroSelecionado);
+					}
 				}
+			} else {
+			JOptionPane.showMessageDialog(this, "Selecione um Livro para editar.");
 			}
 		});
 	}

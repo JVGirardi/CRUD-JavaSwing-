@@ -3,9 +3,8 @@ package com.biblioteca.presentation;
 import java.util.List;
 
 import com.biblioteca.domain.Autor;
-import com.biblioteca.domain.EnumGenero;
+import com.biblioteca.domain.Emprestimo;
 import com.biblioteca.domain.Livro;
-import com.biblioteca.domain.Nacionalidade;
 import com.biblioteca.persistence.AutorDAO;
 import com.biblioteca.persistence.LivroDAO;
 import com.jgoodies.binding.list.SelectionInList;
@@ -42,16 +41,14 @@ public class LivroListModel extends Bean {
 		selection.setList(livros);
 	}
 	
-	public void deleteSelection(){
-		if (selection.hasSelection() ) {
-			try {
-				dao.delete(selection.getSelection());
-				loadLivros();
-				selection.setSelection(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-		}
+	public void deleteSelection() throws Exception {
+		dao.delete(selection.getSelection());
+		loadLivros();
+		selection.setSelection(null);
+	}
+	
+	public boolean isLivroDisponivel(Livro livro) {
+		return dao.isLivroDisponivel(livro);
 	}
 	
 	public SelectionInList<Livro> getSelection() {

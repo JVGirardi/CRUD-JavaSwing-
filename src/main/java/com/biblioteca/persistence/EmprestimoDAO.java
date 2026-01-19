@@ -52,7 +52,10 @@ public class EmprestimoDAO {
 	public List<Emprestimo> findEmprestimoEmAberto() {
 		Session session = sessionBegin();
 		try {
-			return session.createQuery("SELECT e FROM Emprestimo e WHERE e.dataDevolucaoEfetiva IS NULL", Emprestimo.class).list();
+			return session.createQuery("SELECT e FROM Emprestimo e "
+										+ "JOIN FETCH e.client "
+										+ "JOIN FETCH e.livro "
+										+ "WHERE e.dataDevolucaoEfetiva IS NULL", Emprestimo.class).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Collections.emptyList();

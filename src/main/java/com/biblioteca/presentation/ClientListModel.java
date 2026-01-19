@@ -23,6 +23,14 @@ public class ClientListModel extends Bean {
 		
 	}
 	
+	public boolean isClientHistorico(Client client) {
+		return dao.existeHistorico(client.getId());
+	}
+	
+	public boolean isClientDisponivel(Client client) {
+		return dao.IsClientDisponivel(client);
+	}
+	
 	public void deleteSelection() {
 		if (selection.hasSelection()) {
 			try {

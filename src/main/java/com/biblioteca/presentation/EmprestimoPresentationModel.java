@@ -93,6 +93,12 @@ public class EmprestimoPresentationModel extends PresentationModel<Emprestimo> {
 		return service.listarEmprestimosEmAberto();
 	}
 	
+	public void efetivarDevolucao(Emprestimo emprestimo) {
+		service.realizarDevolucao(emprestimo);
+	}
+	
+	
+	
 }
 
 

@@ -29,7 +29,6 @@ public class Client extends AbstractBean{
 	private String phone;
 	
 	@OneToMany(mappedBy = "client")
-	
 	private List<Emprestimo> emprestimos;
 	
 	public Client() {
@@ -80,5 +79,15 @@ public class Client extends AbstractBean{
 	public String toString() {
 		return id + " - " + name;
 	}
+
+	public List<Emprestimo> getEmprestimos() {
+		return emprestimos;
+	}
+
+	public void setEmprestimos(List<Emprestimo> emprestimos) {
+		this.emprestimos = emprestimos;
+	}
+	
+	
 	
 }

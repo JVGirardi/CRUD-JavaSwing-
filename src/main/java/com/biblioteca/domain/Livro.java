@@ -56,6 +56,10 @@ public class Livro extends AbstractBean{
 	public Livro() {
 		super();
 	}
+	
+	public List<Emprestimo> getEmprestimo() {
+		return emprestimos;
+	}
 
 	public Long getId() {
 		return id;

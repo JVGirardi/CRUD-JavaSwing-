@@ -39,6 +39,7 @@ public class ClientFormPanel extends JPanel {
 	private JButton registerButton;
 	private JButton cleanButton;
 	
+
 	public ClientFormPanel() {
 		super(new BorderLayout());
 		initComponents();
@@ -134,12 +135,12 @@ public class ClientFormPanel extends JPanel {
 			
 				clientModel.salvar();
 				JOptionPane.showMessageDialog(this, "Cliente " + clientModel.getNameModel().getValue() + 
-						"\n Cadastrado com sucesso!");
+						"\nCadastrado com sucesso!");
 				
 				if (onSaveCallback != null) {
 					onSaveCallback.run();
 				}
-				
+		
 				clientModel.setBean(new Client());
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());

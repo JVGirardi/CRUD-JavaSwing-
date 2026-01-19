@@ -73,6 +73,25 @@ public class LivroDAO {
 			session.close();
 		}
 	}
+	
+	public boolean isLivroDisponivel(Livro livro) {
+		Session session = sessionBegin();
+		try {
+			String hql = "SELECT 1 FROM Emprestimo e WHERE e.livro = :livro AND e.dataDevolucaoEfetiva is NULL";
+			
+			List<?> result = session.createQuery(hql).setParameter("livro", livro).setMaxResults(1).getResultList();
+			
+			return result.isEmpty();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			session.close();
+		}
+		
+	}
+	
 
 	private Session sessionBegin() {
 		return HibernateUtil.getSessionFactory().openSession();

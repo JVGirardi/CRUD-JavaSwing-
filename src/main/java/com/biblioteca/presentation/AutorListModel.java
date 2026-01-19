@@ -24,16 +24,10 @@ public class AutorListModel extends Bean {
 	}
 	
 	public void deleteSelection() throws Exception {
-		if (selection.hasSelection()) {
-			Autor autorDeletar = selection.getSelection();
-			//duvida
-			if (!autorDeletar.getLivros().isEmpty() && autorDeletar.getLivros() != null) {
-				throw new Exception("Este autor já possui um livro vinculado e não pode ser deletado.");
-			} else {
-				dao.delete(autorDeletar);
-				loadAutors();
-				selection.setSelection(null);
-		}}
+		Autor autorDeletar = selection.getSelection();
+		dao.delete(autorDeletar);
+		loadAutors();
+		selection.setSelection(null);
 	}
 	
 	public SelectionInList<Autor> getSelection() {

@@ -37,6 +37,7 @@ public class EmprestimoFormPanel extends JPanel{
 	private JTextField clientSelecionadoField;
 	
 	private JButton lendButton;
+	private Runnable onLendRefreshTablePanel;
 	
 	public EmprestimoFormPanel() {
 		initComponents();
@@ -44,6 +45,10 @@ public class EmprestimoFormPanel extends JPanel{
 		initListeners();
 		buildUI();
 		
+	}
+	
+	public void setOnLendRefreshTablePanel(Runnable refreshTablePanel) {
+		this.onLendRefreshTablePanel = refreshTablePanel;
 	}
 	
 	public void initComponents() {
@@ -59,8 +64,10 @@ public class EmprestimoFormPanel extends JPanel{
 		booksList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		this.clientSelecionadoField = new JTextField();
+		clientSelecionadoField.setEditable(false);
 		
 		this.livroSelecionadoField = new JTextField();
+		livroSelecionadoField.setEditable(false);
 	}
 	
 	
@@ -184,6 +191,7 @@ public class EmprestimoFormPanel extends JPanel{
 				emprestimoModel.realizarEmprestimo(clienteAtual, livroAtual);
 				JOptionPane.showMessageDialog(this, "Livro:\n[ " + livroAtual.toString() + " ]\nEmprestado para:\n[ " +
 				clienteAtual.toString() + " ]");
+				onLendRefreshTablePanel.run();
 				refreshTable();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, "ERRO ao emprestar livro: \n" + e);
@@ -207,7 +215,6 @@ public class EmprestimoFormPanel extends JPanel{
 		} catch (Exception e) {
 		}
 		SwingUtilities.invokeLater(() -> {
-			
 			JFrame frame = new JFrame("teste");
 			frame.add(new EmprestimoFormPanel());
 			frame.setSize(800,500);

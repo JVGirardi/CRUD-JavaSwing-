@@ -3,6 +3,7 @@ package com.biblioteca.presentation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.biblioteca.domain.Autor;
 import com.biblioteca.domain.Client;
+import com.biblioteca.domain.Livro;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
@@ -94,31 +96,38 @@ public class AutorTablePanel extends JPanel {
 			if (!listModel.getSelection().hasSelection()) {
 				JOptionPane.showMessageDialog(this, "Selecione um autor para deletar");
 				return;
-			}
-			
-			int opt = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir este autor?", "Confirmação", JOptionPane.YES_NO_OPTION);
-			
-			if (opt == JOptionPane.YES_OPTION) {
-				try {
-					listModel.deleteSelection();
-					JOptionPane.showMessageDialog(this, "Autor removido com sucesso");
-					if (onRemoveLoadAutores != null) {
-						onRemoveLoadAutores.run();
-					};
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao excluir este autor", JOptionPane.ERROR_MESSAGE);
+			} else {
+				List<Livro> livroSelecionado = listModel.getSelection().getValue().getLivros();
+				if (!livroSelecionado.isEmpty() && livroSelecionado != null) {
+					JOptionPane.showMessageDialog(this, "Este autor já possui um livro vinculado e não pode ser removido.", "Erro ao remover este autor", JOptionPane.ERROR_MESSAGE);
+				} else {
+					int opt = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir este autor?", "Confirmação", JOptionPane.YES_NO_OPTION);
+					
+					if (opt == JOptionPane.YES_OPTION) {
+						try {
+							listModel.deleteSelection();
+							JOptionPane.showMessageDialog(this, "Autor removido com sucesso");
+							if (onRemoveLoadAutores != null) {
+								onRemoveLoadAutores.run();
+							};
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao excluir este autor", JOptionPane.ERROR_MESSAGE);
+						}
+					}	
 				}
 			}
-			
 			refreshTable();
-				
 		});
 		
 		editButton.addActionListener(e -> {
 			if (listModel.getSelection().hasSelection()) {
-				if (listener != null) {
-					listener.onEdit(listModel.getSelection().getValue());
-				}
+				List<Livro> livroSelecionado = listModel.getSelection().getValue().getLivros();
+				if (!livroSelecionado.isEmpty() && livroSelecionado != null) {
+					JOptionPane.showMessageDialog(this, "Este autor já possui um livro vinculado e não pode ser editado.", "Erro ao editar este autor", JOptionPane.ERROR_MESSAGE);
+				} else {
+					if (listener != null) {
+						listener.onEdit(listModel.getSelection().getValue());
+				}}
 			} else {
 				JOptionPane.showMessageDialog(this, "Selecione um autor para editar.");
 			}

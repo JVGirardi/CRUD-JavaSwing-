@@ -3,9 +3,9 @@ package com.biblioteca.presentation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.biblioteca.domain.Client;
+import com.biblioteca.domain.Emprestimo;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 
@@ -31,7 +32,14 @@ public class ClientTablePanel extends JPanel {
 	private JButton deleteButton;
 	private JButton refreshButton;
 	
+	private Runnable atualizarEmprestimos;
+
+	
 	private ListListener listener;
+	
+	public void setAtualizar(Runnable atualizarEmprestimos) {
+		this.atualizarEmprestimos = atualizarEmprestimos;
+	}
 	
 	public ClientTablePanel(ListListener listener) {
 		this.listener = listener;
@@ -81,19 +89,30 @@ public class ClientTablePanel extends JPanel {
 		
 		deleteButton.addActionListener(e -> { 
 			if (listModel.getSelection().hasSelection()) {
-				Client clienteSelecionado = listModel.getSelection().getValue();
-				int opt = JOptionPane.showConfirmDialog(this, 
-				"Deseja mesmo excluir?\n" 
-				+ "ID: " + clienteSelecionado.getId() + " \n" 
-				+ "Nome: " + clienteSelecionado.getName() + "\n" 
-				+ "E-mail: " + clienteSelecionado.getEmail() + "\n" 
-				+ "Número de Celular: " + clienteSelecionado.getPhone(), 
-				"Deletar Cliente", 
-				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-				if (opt == JOptionPane.YES_OPTION) {
-					listModel.deleteSelection();
-					refreshTable();
-					JOptionPane.showMessageDialog(this, "Excluído com sucesso!");
+				Client client = listModel.getSelection().getValue();
+				boolean temHistorico = listModel.isClientHistorico(client);
+				if (temHistorico) {
+					JOptionPane.showMessageDialog(this, 
+			                "O cliente possui histórico de empréstimos (ativos ou passados) e não pode ser excluído.\n" +
+			                "Para manter a integridade dos dados da biblioteca, o histórico não pode ser apagado.", 
+			                "Exclusão não permitida", 
+			                JOptionPane.WARNING_MESSAGE);
+				} else {
+					Client clienteSelecionado = listModel.getSelection().getValue();
+					int opt = JOptionPane.showConfirmDialog(this, 
+					"Deseja mesmo excluir?\n" 
+					+ "ID: " + clienteSelecionado.getId() + " \n" 
+					+ "Nome: " + clienteSelecionado.getName() + "\n" 
+					+ "E-mail: " + clienteSelecionado.getEmail() + "\n" 
+					+ "Número de Celular: " + clienteSelecionado.getPhone(), 
+					"Deletar Cliente", 
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+					if (opt == JOptionPane.YES_OPTION) {
+						listModel.deleteSelection();
+						refreshTable();
+						JOptionPane.showMessageDialog(this, "Excluído com sucesso!");
+						atualizarEmprestimos.run();
+					}
 				}
 			} else {
 				JOptionPane.showMessageDialog(this, "Selecione um cliente na lista para excluir.");
@@ -102,8 +121,13 @@ public class ClientTablePanel extends JPanel {
 		
 		editButton.addActionListener(e -> {
 			if (listModel.getSelection().hasSelection()) {
-				if (listener != null) {
-					listener.onEdit(listModel.getSelection().getValue());
+				Client client = listModel.getSelection().getValue();
+				if (!listModel.isClientDisponivel(client)) {
+					JOptionPane.showMessageDialog(this, "O cliente está vinculado a um emprestimo em aberto", "Erro ao editar este cliente", JOptionPane.ERROR_MESSAGE);
+				} else { 
+					if (listener != null) {
+						listener.onEdit(listModel.getSelection().getValue());
+					}
 				}
 			} else {
 				JOptionPane.showMessageDialog(this, "Selecione um Cliente para editar. ");

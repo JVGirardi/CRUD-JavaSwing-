@@ -29,6 +29,9 @@ public class MainFrame extends JFrame {
 	private LivroFormPanel livroFormPanel;
 	private LivroTablePanel livroTablePanel;
 	
+	private EmprestimoFormPanel emprestimoFormPanel;
+	private EmprestimoTablePanel emprestimoTablePanel;
+	
 	private JTabbedPane tabbedPane;
 	
 	public MainFrame() {
@@ -54,9 +57,13 @@ public class MainFrame extends JFrame {
 		tabbedPane = new JTabbedPane();
 		
 		clientFormPanel = new ClientFormPanel();
+		emprestimoFormPanel = new EmprestimoFormPanel();
+		emprestimoTablePanel = new EmprestimoTablePanel();
+		
 		
 		clientFormPanel.setOnSaveCallBack(() -> {
 			clientTablePanel.refreshTable();
+			emprestimoFormPanel.refreshTable();
 			tabbedPane.setSelectedIndex(1);
 		});
 		
@@ -66,18 +73,19 @@ public class MainFrame extends JFrame {
 				
 			});
 		
-		tabbedPane.addTab("Cadastro / Edição de Clientes", clientFormPanel);
-		tabbedPane.addTab("Listagem de Clientes", clientTablePanel);
+		clientTablePanel.setAtualizar(() -> {
+			emprestimoFormPanel.refreshTable();
+		});
+		
+		tabbedPane.addTab("Clientes", clientFormPanel);
+		tabbedPane.addTab("Lista Clientes", clientTablePanel);
 		
 		
 		autorFormPanel = new AutorFormPanel();
 		
-		autorFormPanel.setOnSaveLoadAutores(() -> {
-			livroFormPanel.refreshAutoresComboBox();
-		});
-		
 		autorFormPanel.setOnSaveCallBack(() -> {
 			autorTablePanel.refreshTable();
+			livroFormPanel.refreshAutoresComboBox();
 			tabbedPane.setSelectedIndex(2);
 		});
 		
@@ -91,14 +99,15 @@ public class MainFrame extends JFrame {
 		});
 		
 	
-		tabbedPane.addTab("Listagem de autores", autorTablePanel);
-		tabbedPane.addTab("Cadastro / Edição de autores", autorFormPanel);
+		tabbedPane.addTab("Lista Autores", autorTablePanel);
+		tabbedPane.addTab("Autores", autorFormPanel);
 		
 		
 		livroFormPanel = new LivroFormPanel();
 		
 		livroFormPanel.setOnSaveCallBack(() -> {
 			livroTablePanel.refreshTable();
+			emprestimoFormPanel.refreshTable();
 			tabbedPane.setSelectedIndex(4);
 		});
 		
@@ -107,8 +116,27 @@ public class MainFrame extends JFrame {
 			tabbedPane.setSelectedIndex(5);
 		});
 		
-		tabbedPane.addTab("Listagem de Livros", livroTablePanel);
-		tabbedPane.addTab("Cadastro / Edição de Livros", livroFormPanel);
+		livroTablePanel.setOnRemoveRefreshEmprestimo(() -> {
+			emprestimoFormPanel.refreshTable();
+		});
+		
+		tabbedPane.addTab("Lista Livros", livroTablePanel);
+		tabbedPane.addTab("Livros", livroFormPanel);
+		
+		emprestimoTablePanel.setOnReturnRefreshFormPanel(() -> {
+			emprestimoFormPanel.refreshTable();
+		}); 
+		
+		
+		emprestimoFormPanel.setOnLendRefreshTablePanel(() -> {
+			emprestimoTablePanel.refreshTable();
+		});
+		
+		
+	
+		tabbedPane.addTab("Lista Emprestimos", emprestimoTablePanel);
+		tabbedPane.addTab("Emprestimo", emprestimoFormPanel);
+		
 
 	}
 	
