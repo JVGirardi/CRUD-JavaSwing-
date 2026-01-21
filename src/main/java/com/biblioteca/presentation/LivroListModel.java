@@ -47,8 +47,8 @@ public class LivroListModel extends Bean {
 		selection.setSelection(null);
 	}
 	
-	public boolean isLivroDisponivel(Livro livro) {
-		return dao.isLivroDisponivel(livro);
+	public boolean livroVinculoComEmprestimoEstaVazio(Livro livro) {
+		return dao.livroVinculoComEmprestimoEstaVazio(livro);
 	}
 	
 	public SelectionInList<Livro> getSelection() {

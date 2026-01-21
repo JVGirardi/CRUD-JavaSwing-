@@ -56,5 +56,8 @@ public class EmprestimoService {
 		return emprestimoDao.findEmprestimoEmAberto();
 	}
 	
-
+	public List<Emprestimo> listarHistoricoEmprestimos() {
+		return emprestimoDao.listarHistoricoDeEmprestimo();
+	}
+	
 }

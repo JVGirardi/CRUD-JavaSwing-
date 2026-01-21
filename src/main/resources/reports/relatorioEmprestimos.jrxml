@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c87b4490-2d1d-4d5c-ab12-8203e6e4f0dc">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="nmSistema" class="java.lang.String"/>
+	<parameter name="imagemLogo" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="dataDevolucaoPrevista" class="java.time.LocalDate"/>
+	<field name="dataEmprestimo" class="java.time.LocalDate"/>
+	<field name="livro" class="java.lang.Object"/>
+	<field name="dataDevolucaoEfetiva" class="java.time.LocalDate"/>
+	<field name="client" class="java.lang.Object"/>
+	<field name="id" class="java.lang.Long"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{dataDevolucaoPrevista}]]></groupExpression>
+	</group>
+	<pageHeader>
+		<band height="108">
+			<image>
+				<reportElement x="20" y="14" width="120" height="60" uuid="ae7a6c33-e471-420d-be16-ff1272578364"/>
+				<imageExpression><![CDATA[$P{imagemLogo}]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="450" y="10" width="105" height="20" uuid="cbb2f00e-5e9f-46ae-9fa8-f5a8d151fa04"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="170" y="60" width="180" height="14" uuid="80c016f7-9162-4ffb-ac3e-c805a2e1aae1"/>
+				<text><![CDATA[Relatório Geral de Emprestimos]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="90" width="555" height="1" uuid="9916ed8c-bb55-47cc-a52f-e1a29892454f"/>
+			</line>
+			<textField>
+				<reportElement x="170" y="10" width="180" height="30" uuid="f65ddb6d-3660-45a9-aa9c-9e718559682c"/>
+				<textFieldExpression><![CDATA[$P{nmSistema}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="60" width="50" height="20" uuid="c5371a0f-95c9-4623-9804-ec2eb5c7c00e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="500" y="60" width="45" height="20" uuid="c26c3297-e00f-4605-bd66-38080e85817a"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="18" y="23" width="40" height="14" uuid="2fe5f6d4-2115-4fb1-bf01-6b822c71570f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="59" width="555" height="1" uuid="c8d0ff34-b5cd-4f7d-a8b7-ac15741eca76"/>
+			</line>
+			<staticText>
+				<reportElement x="112" y="23" width="40" height="14" uuid="afb4e935-c1cb-4ead-917e-adc51bbf964e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="23" width="40" height="14" uuid="85249f18-0d9a-4c2f-9f9a-b70cd3850fce">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Livro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="18" width="80" height="25" uuid="210dbc61-19d6-4127-9ddb-c7f7e7247182">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de Emprestimo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="9" width="80" height="36" uuid="14a0ce35-063d-4a6b-adea-c440b583d54b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de Devolução Prevista]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="9" width="80" height="36" uuid="5c4cc6cd-89fa-4ea5-897f-72eb11753743">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de Devolução Efetiva]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<textField>
+				<reportElement x="18" y="21" width="40" height="17" uuid="634229ad-a9af-433d-a1a5-758ac1227424">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28c1de3b-4b1f-4478-816b-539b4d7eb870"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="295" y="21" width="70" height="17" uuid="e5c97bd2-5eca-462a-af3c-8ae623fac57d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92d8cfff-9ea5-49cb-8aa0-d6f6e5f45364"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($F{dataEmprestimo} != null) ?$F{dataEmprestimo}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+  : ""
+]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="395" y="20" width="70" height="17" uuid="246dfb55-a2fe-458b-bb4c-a4bbf0b4b708">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c25d459a-3cfb-42f5-b858-685fef005d0c"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($F{dataDevolucaoPrevista} != null) ? $F{dataDevolucaoPrevista}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="490" y="20" width="60" height="17" uuid="050226a9-fdc3-41f9-a33d-89ed2c971eaf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="413a20d4-1f7b-483e-9f97-2cb87ded19d9"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($F{dataDevolucaoEfetiva} != null) ? $F{dataDevolucaoEfetiva}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "Pendente"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="21" width="65" height="17" uuid="284fc9e4-14b7-4238-ba3f-72c97e038a88">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bcb6700-07f3-467d-a882-af8479b41307"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{client}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="21" width="60" height="17" uuid="85f37b0e-f7a9-4b78-934b-185d658f3d33">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a15bf937-c5e5-409b-bbbc-8e2ed631feca"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{livro}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

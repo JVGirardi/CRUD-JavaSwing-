@@ -95,6 +95,19 @@ public class EmprestimoDAO {
 		}
 	}
 	
+	public List<Emprestimo> listarHistoricoDeEmprestimo() {
+		Session session = sessionBegin();
+		try {
+			String hql = "SELECT e FROM Emprestimo e JOIN FETCH e.livro JOIN FETCH e.client";
+			return session.createQuery(hql, Emprestimo.class).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
+		} finally {
+			session.close();
+		}
+	}
+	
 	
 	private Session sessionBegin() {
 		return HibernateUtil.getSessionFactory().openSession();

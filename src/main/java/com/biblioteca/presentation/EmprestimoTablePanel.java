@@ -30,6 +30,7 @@ public class EmprestimoTablePanel extends JPanel {
 	private EmprestimoPresentationModel model;
 	private JButton returnButton;
 	private SelectionInList<Emprestimo> selection;
+	private JButton gerarRelatorioButton;
 	
 	private Runnable onReturnRefreshFormPanel;
 	
@@ -65,8 +66,8 @@ public class EmprestimoTablePanel extends JPanel {
 		table.setSelectionModel(new SingleListSelectionAdapter(selection.getSelectionIndexHolder()));
 		
 		returnButton = new JButton("Devolver");
-		
-		
+		gerarRelatorioButton = new JButton("Gerar Relatório");
+	
 		
 	}
 	
@@ -103,6 +104,11 @@ public class EmprestimoTablePanel extends JPanel {
 		selection.addPropertyChangeListener(l -> {
 			atualizarBotaoDevolver();
 		});
+		
+		gerarRelatorioButton.addActionListener(l -> {
+			gerarRelatorioButton.setEnabled(false);
+			model.gerarRelatorioEmprestimo();
+		});
 	}
 	
 	public void atualizarBotaoDevolver() {
@@ -122,6 +128,7 @@ public class EmprestimoTablePanel extends JPanel {
 		btnBuilder.addGlue();
 		btnBuilder.addButton(returnButton);
 		btnBuilder.addRelatedGap();
+		btnBuilder.addButton(gerarRelatorioButton);
 		
 		JPanel buttonPanel = btnBuilder.getPanel();
 		buttonPanel.setBorder(new EmptyBorder(20,20,20,20));

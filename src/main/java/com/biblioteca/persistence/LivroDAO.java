@@ -74,10 +74,10 @@ public class LivroDAO {
 		}
 	}
 	
-	public boolean isLivroDisponivel(Livro livro) {
+	public boolean livroVinculoComEmprestimoEstaVazio(Livro livro) {
 		Session session = sessionBegin();
 		try {
-			String hql = "SELECT 1 FROM Emprestimo e WHERE e.livro = :livro AND e.dataDevolucaoEfetiva is NULL";
+			String hql = "SELECT 1 FROM Emprestimo e WHERE e.livro = :livro";
 			
 			List<?> result = session.createQuery(hql).setParameter("livro", livro).setMaxResults(1).getResultList();
 			

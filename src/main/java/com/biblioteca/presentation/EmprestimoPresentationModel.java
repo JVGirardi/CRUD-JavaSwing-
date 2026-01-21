@@ -5,7 +5,9 @@ import java.util.List;
 import com.biblioteca.domain.Client;
 import com.biblioteca.domain.Emprestimo;
 import com.biblioteca.domain.Livro;
+import com.biblioteca.persistence.EmprestimoDAO;
 import com.biblioteca.persistence.EmprestimoService;
+import com.biblioteca.persistence.ReportManager;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
@@ -95,6 +97,12 @@ public class EmprestimoPresentationModel extends PresentationModel<Emprestimo> {
 	
 	public void efetivarDevolucao(Emprestimo emprestimo) {
 		service.realizarDevolucao(emprestimo);
+	}
+	
+	public void gerarRelatorioEmprestimo() {
+		ReportManager jasper = new ReportManager();
+		List<Emprestimo> historicoEmprestimo = service.listarHistoricoEmprestimos();
+		jasper.gerarRelatorio("relatorioEmprestimos.jasper", historicoEmprestimo);
 	}
 	
 	

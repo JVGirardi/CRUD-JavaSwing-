@@ -158,7 +158,7 @@ public class LivroTablePanel extends JPanel {
 			
 			if (listModel.getSelection().hasSelection()) {
 				Livro livroSelecionado = listModel.getSelection().getSelection();
-				if (!listModel.isLivroDisponivel(livroSelecionado)) {
+				if (!listModel.livroVinculoComEmprestimoEstaVazio(livroSelecionado)) {
 					JOptionPane.showMessageDialog(this, "Não é possivel excluir um livro vinculado a um emprestimo.", "Erro ao excluir este livro", JOptionPane.ERROR_MESSAGE);
 				} else {
 					int opc = JOptionPane.showConfirmDialog(this, "Deseja mesmo excluir? \n"
@@ -191,7 +191,7 @@ public class LivroTablePanel extends JPanel {
 		editButton.addActionListener(e -> {
 			if (listModel.getSelection().hasSelection()) {
 				Livro livroSelecionado = listModel.getSelection().getValue();
-				if (!listModel.isLivroDisponivel(livroSelecionado)) {
+				if (!listModel.livroVinculoComEmprestimoEstaVazio(livroSelecionado)) {
 					JOptionPane.showMessageDialog(this, "Não é possivel editar um livro vinculado a um emprestimo.", "Erro ao editar este livro", JOptionPane.ERROR_MESSAGE);
 				} else {
 					if (livroSelecionado != null ) {
