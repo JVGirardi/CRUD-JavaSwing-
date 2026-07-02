@@ -1,8 +1,3 @@
-<!--- # "Can be a image or a gift from the project pages" -->
-<p align="center">
-  <img src="src/main/resources/images/1_logorodape.png" alt="Library Management System">
-</p>
-
 # Library Management System (CRUD Java Swing)
 
 A complete desktop application for library management. This system provides full CRUD operations to manage authors (`Autor`), clients (`Client`), books (`Livro`), and loans (`Emprestimo`). It also includes a secure login system (`LoginPanel`) and automated PDF report generation (`RelatorioView`).
